@@ -3,4 +3,8 @@ name = "rust-study"
 version = "0.1.0"
 edition = "2024"
 
+[workspace]
+name = "rust-study"
+members = ["rust_basic"]
+
 [dependencies]

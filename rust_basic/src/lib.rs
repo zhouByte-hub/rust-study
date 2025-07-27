@@ -1,14 +1,15 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+pub mod chapter_1;
+
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::chapter_1::{practice::fibonacci};
+
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        let result = fibonacci(5);
+        assert_eq!(result, 5);
     }
+
 }
