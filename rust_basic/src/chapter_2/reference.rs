@@ -5,7 +5,7 @@
  */
 
 // 引用和解引用
-pub fn test_1(){
+pub fn test_1() {
     let x = 5;
     let y = &x;
     println!("{}", *y);
@@ -18,13 +18,10 @@ pub fn test_1(){
  */
 pub fn test_2() {
     let mut x = 5;
-    let mut y = &mut x;
+    let mut _y = &mut x;
     // let mut b = &mut x; // 会报错，违反条件1
-    
+
     // let b = &x; // 会报错，违反条件2
 
     // let b = x;  // 会报错，违反条件1
-    *y += 1;
-
-    println!("{}", *y);
 }

@@ -19,4 +19,3 @@ pub fn test_nan() {
     let a = 12_f32;
     println!("{}", a.is_nan());
 }
-

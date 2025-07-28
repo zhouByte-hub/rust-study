@@ -6,19 +6,18 @@
  *      5、一个函数如果没有返回值的情况下，默认是会返回一个单元类型作为返回值
  */
 
- pub fn test(){
+pub fn test() {
     let value = test_1();
     let a = test_2(value); // a == ()
     println!("a = {:?}", a);
- }
+}
 
-
- // 返回指定类型的返回值
- pub fn test_1() -> String {
+// 返回指定类型的返回值
+pub fn test_1() -> String {
     String::from("abc")
- }
+}
 
- // 没有返回值的情况下会默认返回一个()单元类型
- pub fn test_2(value: String){
+// 没有返回值的情况下会默认返回一个()单元类型
+pub fn test_2(value: String) {
     println!("{value}");
- }
+}
