@@ -43,3 +43,4 @@ Rust的优势：
   - 对测试的内置支持。
   - 优秀的语言服务协议（Language Server Protocol）支持。
   
+Rust圣经：<a src="https://course.rs/basic/">https://course.rs/basic/</a>
