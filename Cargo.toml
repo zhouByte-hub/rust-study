@@ -8,3 +8,4 @@ name = "rust-study"
 members = ["rust_basic"]
 
 [dependencies]
+duct = "1.0.0"
