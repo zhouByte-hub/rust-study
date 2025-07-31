@@ -6,20 +6,20 @@ use std::fmt::Debug;
 
 #[derive(Debug)]
 #[allow(dead_code)]
-struct User{
+struct User {
     username: String,
     password: String,
 }
 
-pub fn test(){
+pub fn test() {
     // 初始化实例时，每个字段都需要进行初始化；初始化时的字段顺序不需要和结构体定义时的顺序一致
     let user = User {
         username: String::from("张三"),
-        password: String::from("123123")
+        password: String::from("123123"),
     };
 
     // .. 语法表明凡是我们没有显式声明的字段，全部从 user1 中自动获取。需要注意的是 ..user1 必须在结构体的尾部使用。
-    let user2 = User{
+    let user2 = User {
         username: String::from("李四"),
         ..user
     };
@@ -28,41 +28,35 @@ pub fn test(){
     println!("{:?}", user2)
 }
 
-
 // 元组结构体
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct ColorStruct(u8, u8, u8);
 
-pub fn test_2(){
+pub fn test_2() {
     let red = ColorStruct(255, 0, 0);
     println!("{:?}", red)
 }
-
 
 // 单元结构体：定义一个类型，但是不关心该类型的内容，只关心它的行为时，就可以使用单元结构体
 pub struct UnitStruct;
 
 impl UnitStruct {
-    
     pub fn test() {
         println!("单元结构体")
     }
-
 }
-
 
 /** 结构体所有权
  * 有一处细节：我们使用了自身拥有所有权的 String 类型而不是基于引用的 &str 字符串切片类型。这是一个有意而为之的选择：因为我们想要这个结构体拥有它所有的数据，而不是从其它地方借用数据。
  * 生命周期能确保结构体的作用范围要比它所借用的数据的作用范围要小。
  */
 #[allow(dead_code)]
-struct Person<'a>{
-    username: &'a str // 表示当前结构体中的 username 是借用了外部的值，Rust 中的所有权会保证结构体的中 username 的作用域小于原始值
+struct Person<'a> {
+    username: &'a str, // 表示当前结构体中的 username 是借用了外部的值，Rust 中的所有权会保证结构体的中 username 的作用域小于原始值
 }
 
 impl Debug for Person<'_> {
-    
     fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         Ok(())
     }

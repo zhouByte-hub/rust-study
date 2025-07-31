@@ -9,29 +9,26 @@
     2、动态数组 Vector 是存储在堆上，因此长度可以动态改变。
 */
 
-pub fn test(){
+pub fn test() {
     // 数组的元素类型要统一，长度要固定。
-    let array_1 = [1,2,3,4,5,6];        // 直接声明
-    let _array_2: [i32; 3] = [1,2,3];              // 指明类型和长度
-    let _array_3 = [1; 5];               // 某个值重复出现 N 次的数组
+    let array_1 = [1, 2, 3, 4, 5, 6]; // 直接声明
+    let _array_2: [i32; 3] = [1, 2, 3]; // 指明类型和长度
+    let _array_3 = [1; 5]; // 某个值重复出现 N 次的数组
 
-    println!("{}", array_1[0]);                   // 数组元素的获取可以直接使用取地址符
+    println!("{}", array_1[0]); // 数组元素的获取可以直接使用取地址符
 }
 
-
 // 基本类型在 Rust 中赋值是以 Copy 的形式，很可惜复杂类型都没有自动实现深拷贝，只能一个个创建。
-pub fn test_2(){
+pub fn test_2() {
     let _array: [String; 3] = [String::from("1"), String::from("2"), String::from("3")];
     // 作为一个追求极致完美的Rust开发者，怎么能容忍上面这么难看的代码存在！
 
-    let _result: [String; 8] = std::array::from_fn(|i| {
-        format!("{}-{}", "content", i)
-    });
+    let _result: [String; 8] = std::array::from_fn(|i| format!("{}-{}", "content", i));
 }
 
 // 多维数组
 pub fn test_3() {
-    let _a1 = [[1,2,3],[2,3,4]];
-    let _a2: [[u8; 1]; 3] = [[1],[2],[3]];
+    let _a1 = [[1, 2, 3], [2, 3, 4]];
+    let _a2: [[u8; 1]; 3] = [[1], [2], [3]];
     let _a3 = [[0; 3], [1; 3]];
 }
