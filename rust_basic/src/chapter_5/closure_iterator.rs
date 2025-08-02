@@ -20,11 +20,25 @@ fn test_2<T>(add: T) -> i32 where T: Fn(i32, i32) -> i32 {
     add(1, 2)
 } 
 
-// 闭包作为函数的返回值
+/** 闭包作为函数的返回值
+ *  对于无法在编译期间确定的类型，都需要使用dyn来表示动态类型，但是使用impl作为参数返回值时就不需要。
+ *  因为返回值是Fn(i32, i32) -> i32的一个实现，这个返回值在编译期间就可以确定下来，所以不需要写dyn。
+ * 
+ *  一句话总结：
+ *  在函数参数中使用 impl Fn(i32, i32) -> i32 是 “泛型 + Trait Bound” 的语法糖，
+ *  它表示“这个参数可以是任何实现了 Fn(i32, i32) -> i32 trait 的类型”，
+ *  编译器会在调用时进行 单态化（monomorphization），生成具体类型的版本，属于 静态分发，因此不需要 dyn。
+ */
 fn test_4() -> impl Fn(i32, i32) -> i32 {
     let m = 5;
     move |a, b| a + m + b
 }
+
+// 也不需要写dyn
+fn a(_value: impl Fn(i32, i32) -> i32){
+
+}
+
 
 // 结构体中使用闭包
 struct User<T> where T: Fn(i32) -> i32{
@@ -42,4 +56,41 @@ fn test_3(){
     let _sub = move |x: i32| format!("{}-{}", a, x);
 
     // println!("{}", a); // 这里会报错，因为a的所有权已经被转移了
+}
+
+
+
+
+
+
+/** 迭代器
+ *  1、iter()：得到一个借用迭代器
+ *  2、into_iter()：会获取元素的所有权
+ *  3、iter_mut()：得到一个可变借用迭代器
+ */
+fn for_test(){
+    let list = [1,2,3,4];
+    // 1、普通遍历
+    for item in list{
+        println!("{}", item)
+    }
+
+    // 2、迭代器遍历：迭代器是惰性的，意味着如果你不使用它，那么它将不会发生任何事
+    for item in list.iter() {
+        println!("{}", item)
+    }
+
+    // 3
+    let mut iter = list.iter();
+    println!("{:?}", iter.next());  // 使用next方法一个一个读取元素
+
+    // 4
+    // for item in list.iter_mut(){} // 要求list是mut
+
+    // 5
+    for item in list.into_iter(){
+        println!("{}", item)
+    }
+
+    // 1和5一样，都会转移所有权
 }
