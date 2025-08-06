@@ -1,4 +1,4 @@
-use std::{rc::Rc, sync::{Arc, Mutex, RwLock}, thread};
+use std::{sync::{Arc, Mutex, RwLock}, thread};
 
 /**
  * 在多线程编程中，同步性极其的重要，当你需要同时访问一个资源、控制不同线程的执行次序时，都需要使用到同步性。
