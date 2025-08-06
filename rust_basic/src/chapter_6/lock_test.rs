@@ -40,7 +40,7 @@ fn test_2(){
     let value = Mutex::new(5);
     let rc = Arc::new(value);
 
-    for i in 0..10 {
+    for _i in 0..10 {
         let temp_rc = rc.clone();
         thread::spawn(move || {
             temp_rc.try_lock().unwrap();    // 使用try_lock方法尝试去获取一次锁，当获取不到就直接报错，不会发生阻塞
