@@ -10,6 +10,21 @@ use std::sync::atomic::{AtomicI32, Ordering};
 fn test_1(){
     // Atomic也具有内部可变性，只需要将变量声明为mut即可
     let value = AtomicI32::new(12);
+
+
+    /* 内存顺序是指 CPU 在访问内存时的顺序，该顺序可能受以下因素的影响
+            1、代码中的先后顺序
+            2、编译器优化导致在编译阶段发生改变(内存重排序 reordering)
+            3、运行阶段因 CPU 的缓存机制导致顺序被打乱
+       Ordering 内存顺序
+            1、Relaxed：这是最宽松的规则，它对编译器和 CPU 不做任何限制，可以乱序
+            2、Release：设定内存屏障(Memory barrier)，保证它之前的操作永远在它之前，但是它后面的操作可能被重排到它前面
+            3、Acquire：设定内存屏障，保证在它之后的访问永远在它之后，但是它之前的操作却有可能被重排到它后面，往往和Release在不同线程中联合使用
+            4、AcqRel：是 Acquire 和 Release 的结合，同时拥有它们俩提供的保证。比如你要对一个 atomic 自增 1，同时希望该操作之前和之后的读取或写入操作不会被重新排序
+            5、SeqCs：SeqCst就像是AcqRel的加强版，它不管原子操作是属于读取还是写入的操作，只要某个线程有用到SeqCst的原子操作，线程中该SeqCst操作前的数据操作绝对不会被重新排在该SeqCst操作之后，且该SeqCst操作后的数据操作也绝对不会被重新排在SeqCst操作前。
+       内存顺序的选择：
+            不知道怎么选择时，优先使用SeqCst，虽然会稍微减慢速度，但是慢一点也比出现错误好 
+     */
     value.fetch_add(12, Ordering::Relaxed);
     println!("{:?}", value);
 }
