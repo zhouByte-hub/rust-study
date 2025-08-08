@@ -5,7 +5,7 @@ edition = "2024"
 
 [workspace]
 name = "rust-study"
-members = ["rust_basic"]
+members = ["rust_basic", "rust_async", "rust_net"]
 
 [dependencies]
 duct = "1.0.0"
