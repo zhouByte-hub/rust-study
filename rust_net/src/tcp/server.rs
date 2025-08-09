@@ -1,16 +1,17 @@
-
-
 /**
  * TcpServer不能放在测试代码中执行
  */
 
 #[cfg(test)]
-mod server_test{
-    use std::{io::Read, net::{TcpListener, TcpStream}, thread};
-
+mod server_test {
+    use std::{
+        io::Read,
+        net::{TcpListener, TcpStream},
+        thread,
+    };
 
     #[test]
-    fn test(){
+    fn test() {
         tracing::info!("Tcp Server running...");
         let tcp_server = TcpListener::bind("0.0.0.0:8888").unwrap();
 
@@ -19,9 +20,11 @@ mod server_test{
             match tcp_stream {
                 Ok(stream) => {
                     tracing::info!("接收到连接");
-                    thread::spawn(move || handle_connect(stream)).join().unwrap()
-                },
-                Err(e) => tracing::error!("{}", e)
+                    thread::spawn(move || handle_connect(stream))
+                        .join()
+                        .unwrap()
+                }
+                Err(e) => tracing::error!("{}", e),
             }
         }
     }

@@ -7,7 +7,6 @@
  * 总之，栈的分配速度肯定比堆上快，但是读取速度往往取决于你的数据能不能放入寄存器或 CPU 高速缓存。 因此不要仅仅因为堆上性能不如栈这个印象，就总是优先选择栈，导致代码更复杂的实现。
  */
 
-
 /** Box 是简单的封装，除了将值存储在堆上外，并没有其它性能上的损耗，但是功能单一。
  *  使用场景如下：
  *      1、特意的将数据分配在堆上
@@ -22,31 +21,28 @@ pub fn box_demo() {
     // println!("{}", a); // 发生了所有权的转移
 }
 
-
-
 /** Box最大、最常见的作用：包裹一个动态的类型（Trait）
  * Box 背后是调用 jemalloc 来做内存管理，所以堆上的空间无需我们的手动管理。与此类似，带 GC 的语言中的对象也是借助于 Box 概念来实现的，一切皆对象 = 一切皆 Box， 只不过我们无需自己去 Box 罢了。
  */
-trait Draw{
+trait Draw {
     fn draw(&self);
 }
 
 struct Button;
-impl Draw for Button{
+impl Draw for Button {
     fn draw(&self) {
         println!("draw button");
     }
 }
 struct Select;
-impl Draw for Select{
+impl Draw for Select {
     fn draw(&self) {
         println!("draw select");
     }
 }
 
-
-fn test_1(){
-    let value: Vec<Box<dyn Draw>> = vec![Box::new(Button{}), Box::new(Select{})];
+fn test_1() {
+    let value: Vec<Box<dyn Draw>> = vec![Box::new(Button {}), Box::new(Select {})];
     for item in value {
         item.draw();
     }

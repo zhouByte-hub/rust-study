@@ -7,26 +7,26 @@ use std::{sync::mpsc, thread};
  *          需要注意，由于内部是泛型实现，一旦类型被推导确定，该通道就只能传递对应类型的值, 例如此例中非i32类型的值将导致编译错误。
  *      2、接收消息的操作rx.recv()会阻塞当前线程，直到读取到值，或者通道被关闭
  *      3、需要使用move将tx的所有权转移到子线程的闭包中
- * 
+ *
  * 发送者依旧遵循Rust所有权的原则：
  *      1、若值的类型实现了Copy特征，则直接复制一份该值，然后传输过去，例如之前的i32类型
  *      2、若值没有实现Copy，则它的所有权会被转移给接收端，在发送端继续使用该值将报错
- * 
+ *
  * 所有发送者被drop或者所有接收者被drop后，通道会自动关闭
  */
 
-fn test_1(){
+fn test_1() {
     // mpsc::channel得到的是一个元组，分别对应发送者和接收者
     let (tx, tr) = mpsc::channel();
 
     // 对于使用发送者和接收者来说，就需要将所有权移入子线程中。
     thread::spawn(move || {
-        tx.send("abc").unwrap(); 
+        tx.send("abc").unwrap();
     });
 
     thread::spawn(move || {
         tr.recv().unwrap(); // recv会阻塞当前线程，可以使用try_recv()
-        tr.try_recv().unwrap();    // 不会阻塞当前线程
+        tr.try_recv().unwrap(); // 不会阻塞当前线程
     });
 }
 

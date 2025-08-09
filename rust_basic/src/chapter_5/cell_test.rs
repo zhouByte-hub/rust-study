@@ -7,8 +7,7 @@ use std::cell::{Cell, RefCell};
 
 struct A;
 
-fn test_1(){
-
+fn test_1() {
     // 对于实现了Copy的类型，Cell和RefCell没有区别，因为Copy类型在赋值时，会进行深拷贝，所以不会出现多个可变引用的情况
     let a = Cell::new("String");
     println!("{}", a.get());
@@ -20,16 +19,13 @@ fn test_1(){
     // a.set(A);
     // println!("{}", a.get());
 
-
     // RefCell可以应用于任何类型，包括没有实现Copy的类型
     let b = RefCell::new(String::from("String"));
-    let _ = b.borrow();     // 获取不可变引用
+    let _ = b.borrow(); // 获取不可变引用
     let mut mut_b = b.borrow_mut(); // 获取可变引用
-    mut_b.push_str("123");  // 修改值
-
+    mut_b.push_str("123"); // 修改值
 
     let x = RefCell::new(A);
     let mut y = x.borrow_mut();
     *y = A;
-    
 }

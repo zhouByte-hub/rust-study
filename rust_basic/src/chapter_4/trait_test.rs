@@ -41,14 +41,11 @@ fn test_3() -> impl Summary {
     }
 }
 
-
-
-
 /** 关联类型
  * 关联类型是在特征定义的语句块中，声明一个自定义类型，这样就可以在特征的方法签名中使用该类型
  */
 pub trait AssisTrait {
-    type A;     // 对于实现了AssisTrait的结构体或者枚举来说，都需要显示的声明A的类型
+    type A; // 对于实现了AssisTrait的结构体或者枚举来说，都需要显示的声明A的类型
 
     fn add(value: Self::A, value2: Self::A) -> Self::A;
 }

@@ -6,21 +6,19 @@
  * 我们无法为一个类型同时实现 Copy 和 Drop 特征。因为实现了 Copy 特征的类型会被编译器隐式的复制，因此非常难以预测析构函数执行的时间和频率。因此这些实现了 Copy 的类型无法拥有析构函数。
  */
 
- #[derive(Debug)]
+#[derive(Debug)]
 struct A;
 
 #[derive(Debug)]
 struct B;
 
 impl Drop for A {
-
     fn drop(&mut self) {
         println!("A is dropped");
     }
 }
 
 impl Drop for B {
-
     fn drop(&mut self) {
         println!("B is dropped");
     }
@@ -29,28 +27,23 @@ impl Drop for B {
 #[derive(Debug)]
 struct Foo {
     a: A,
-    b: B
+    b: B,
 }
 
 impl Drop for Foo {
-
     fn drop(&mut self) {
         println!("Foo is dropped");
     }
 }
 
-
 #[cfg(test)]
-mod drop_test{
+mod drop_test {
 
-    use crate::chapter_5::drop_point::{Foo, A, B};
+    use crate::chapter_5::drop_point::{A, B, Foo};
 
     #[test]
-    fn test(){
-        let foo = Foo {
-            a: A,
-            b: B
-        };
+    fn test() {
+        let foo = Foo { a: A, b: B };
         println!("{:?}", foo);
     }
 }

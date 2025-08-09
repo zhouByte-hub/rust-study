@@ -11,15 +11,14 @@
 // }
 
 // 上述代码会报错，需要使用下列这种方式，让value1和value2两个引用的生命周期至少能和test_1这个方法的生命周期一样长
-pub fn live_cycle_test_1<'a>(value1: &'a str, _value2: &'a str) -> &'a str{
+pub fn live_cycle_test_1<'a>(value1: &'a str, _value2: &'a str) -> &'a str {
     value1
 }
 
 // 结构体生命周期
-pub struct User<'a>{
-    username: &'a str   // 让username这个引用的生命周期至少和User这个结构体对象的生命周期一样长
+pub struct User<'a> {
+    username: &'a str, // 让username这个引用的生命周期至少和User这个结构体对象的生命周期一样长
 }
-
 
 /* 生命周期的三条消除规则
     1、每一个引用参数都会获得独自的生命周期。
@@ -27,48 +26,40 @@ pub struct User<'a>{
     3、若存在多个引用参数，且其中一个是&self或者&mut self，则self的生命周期会赋值给所有输入引用参数。
     4、若输出的引用参数与输入引用参数有关，则需要声明生命周期
 */
-pub fn live_cycle_test_2(_value1: &str, _value2: &str){ // 符合条件1
-
+pub fn live_cycle_test_2(_value1: &str, _value2: &str) { // 符合条件1
 }
 
-pub fn live_cycle_test_3(_value1: &str) -> &str{  //符合条件2
+pub fn live_cycle_test_3(_value1: &str) -> &str {
+    //符合条件2
     _value1
 }
 
 struct A;
 
 impl A {
-    
-    pub fn live_cycle_test_4(&self, _value1: &str, _value2: &str){  // 符合条件3
-        
+    pub fn live_cycle_test_4(&self, _value1: &str, _value2: &str) { // 符合条件3
     }
 
-    pub fn live_cycle_test_5<'a>(&self, value1: &'a str, _value2: &'a str) -> &'a str{  // 符合条件4
+    pub fn live_cycle_test_5<'a>(&self, value1: &'a str, _value2: &'a str) -> &'a str {
+        // 符合条件4
         value1
     }
 }
 
-
 // 静态生命周期，存活时间与程序一样久：&'static和'static
-pub fn live_cycle_test_6(){
+pub fn live_cycle_test_6() {
     let _content: &'static str = "abcdef";
 }
 
-
-
 #[cfg(test)]
-mod test_live_cycle{
-    use crate::chapter_5::live_cycle::{live_cycle_test_1, User};
-
+mod test_live_cycle {
+    use crate::chapter_5::live_cycle::{User, live_cycle_test_1};
 
     #[test]
-    pub fn cycle_test(){
+    pub fn cycle_test() {
         live_cycle_test_1("a", "b");
 
         let name = "张三";
-        User{
-            username: name
-        };
+        User { username: name };
     }
-
 }

@@ -1,11 +1,9 @@
-
 #[cfg(test)]
 mod test {
     use std::{io::Result, net::UdpSocket};
 
-
     #[test]
-    fn test() -> Result<()>{
+    fn test() -> Result<()> {
         let udp_client = UdpSocket::bind("0.0.0.0:8890")?;
         udp_client.connect("127.0.0.1:8889")?;
 
@@ -20,7 +18,12 @@ mod test {
         if input == "info" {
             let mut info = [0; 255];
             let (length, src) = udp_client.recv_from(&mut info)?;
-            tracing::info!("接收到{}发送的响应，内容长度：{}, 内容为：{:?}", src, length, String::from_utf8(info[..length].to_vec()));
+            tracing::info!(
+                "接收到{}发送的响应，内容长度：{}, 内容为：{:?}",
+                src,
+                length,
+                String::from_utf8(info[..length].to_vec())
+            );
         }
 
         Ok(())
