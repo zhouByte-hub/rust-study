@@ -11,3 +11,4 @@ members = ["rust_basic", "rust_async", "rust_net"]
 duct = "1.0.0"
 serde = {version="1.0", features = ["derive"]}
 serde_json = "1.0.142"
+rust-ini = "0.21"
