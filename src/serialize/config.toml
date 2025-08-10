@@ -1,0 +1,20 @@
+[database]
+url = "http://localhost:3306/test?useSSL=true"
+username = "root"
+password = "123123"
+table = "logs"
+index = 1
+
+
+
+[dependencies]
+package = ["serde", "toml", "anyhow"]
+versions = [1,2,3]
+
+[[projects]]
+name = "server-a"
+version = "1.0.1"
+
+[[projects]]
+name = "server-b"
+version = "1.0.2"
