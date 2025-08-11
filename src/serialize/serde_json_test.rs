@@ -59,7 +59,7 @@ mod test {
             .write(true)
             .create(true)
             .open(PathBuf::from(
-                "E:\\project\\rust\\rust-study\\src\\serialize\\writer.json",
+                "E:\\project\\rust\\rust-study\\src\\serialize\\data\\json_data.json",
             ))
             .unwrap();
         serde_json::to_writer(&file, &user)?;

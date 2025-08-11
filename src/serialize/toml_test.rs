@@ -48,7 +48,7 @@ struct Keys {
 
 
 #[derive(Debug, Serialize, Deserialize)]
-struct TomlConfig{
+pub struct TomlConfig{
     database: Database,
     dependencies: Dependency,
     projects: Vec<Project>

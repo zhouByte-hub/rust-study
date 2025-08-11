@@ -22,7 +22,7 @@ mod ini_test {
             .with_section(Some("deployment"))
             .set("dev", "左文建")
             .set("deploy", "周海军");
-        config.write_to_file(PathBuf::from("src/serialize/ini_test.ini"))?;
+        config.write_to_file(PathBuf::from("src/serialize/data/ini_test.ini"))?;
         Ok(())
     }
 
