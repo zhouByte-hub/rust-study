@@ -1,4 +1,4 @@
-use clap::{Parser,Subcommand};
+use clap::{Parser, Subcommand};
 
 /**
  * 一个简单易用、高效且功能全面的命令行参数解析器
@@ -9,7 +9,7 @@ use clap::{Parser,Subcommand};
  *      author：作者信息
  *      name：自定义程序名
  *      subcommand：标记为子命令
- * 
+ *
  * arg参数：
  *      short：支持短选项 -n
  *      long：支持长选项 -name
@@ -23,19 +23,26 @@ use clap::{Parser,Subcommand};
  *      value_enum：枚举类型参数
  */
 
-#[derive(Parser, Debug)]    // Parser用于结构体，自动生成解析命令行参数的代码
+#[derive(Parser, Debug)] // Parser用于结构体，自动生成解析命令行参数的代码
 #[command(
-    name = "clapDemo", 
-    version, 
-    about = "A file processing tool", 
-    long_about = "一个简单易用、高效且功能全面的命令行参数解析器", 
-    author = "Time Travel")]
+    name = "clapDemo",
+    version,
+    about = "A file processing tool",
+    long_about = "一个简单易用、高效且功能全面的命令行参数解析器",
+    author = "Time Travel"
+)]
 struct ClapDemo {
-
     #[arg(short, long, value_name = "NAME")]
     name: Option<String>,
 
-    #[arg(short, long, default_value = "c_type", value_name = "type", help = "类型", required = true)]
+    #[arg(
+        short,
+        long,
+        default_value = "c_type",
+        value_name = "type",
+        help = "类型",
+        required = true
+    )]
     c_type: String,
 
     #[command(subcommand)]
@@ -45,12 +52,10 @@ struct ClapDemo {
 #[derive(Subcommand, Debug)]
 enum SubCommand {
     Test,
-    Run
+    Run,
 }
 
-
-
-fn main(){
+pub fn main() {
     let value = ClapDemo::parse();
     println!("{:?}", value);
 }

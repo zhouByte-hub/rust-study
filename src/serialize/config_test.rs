@@ -9,39 +9,44 @@
  */
 
 #[cfg(test)]
-mod test{
+mod test {
 
     use config::{Config, ConfigError};
-
 
     #[test]
     fn toml_config() -> Result<(), ConfigError> {
         // let value: TomlConfig = Config::builder().add_source(config::File::with_name("src/serialize/data/config.toml")).build()?;
-        let value = Config::builder().add_source(config::File::with_name("src/serialize/data/config.toml")).build()?;
+        let value = Config::builder()
+            .add_source(config::File::with_name("src/serialize/data/config.toml"))
+            .build()?;
         println!("{:?}", value);
         Ok(())
     }
 
     #[test]
     fn ini_config() -> Result<(), ConfigError> {
-        let value = Config::builder().add_source(config::File::with_name("src/serialize/data/ini_test.ini")).build()?;
+        let value = Config::builder()
+            .add_source(config::File::with_name("src/serialize/data/ini_test.ini"))
+            .build()?;
         println!("{:?}", value);
         Ok(())
     }
 
     #[test]
     fn json_config() -> Result<(), ConfigError> {
-        let value = Config::builder().add_source(config::File::with_name("src/serialize/data/json_data.json")).build()?;
+        let value = Config::builder()
+            .add_source(config::File::with_name("src/serialize/data/json_data.json"))
+            .build()?;
         println!("{:?}", value);
         Ok(())
     }
-
 
     #[test]
     fn yaml_config() -> Result<(), ConfigError> {
-        let value = Config::builder().add_source(config::File::with_name("src/serialize/data/json_data.json")).build()?;
+        let value = Config::builder()
+            .add_source(config::File::with_name("src/serialize/data/json_data.json"))
+            .build()?;
         println!("{:?}", value);
         Ok(())
     }
-
 }
