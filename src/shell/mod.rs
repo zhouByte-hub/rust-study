@@ -1,2 +1,3 @@
 pub mod duct_demo;
 pub mod duct_sh_demo;
+pub mod clap_demo;
