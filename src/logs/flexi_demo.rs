@@ -9,7 +9,7 @@
 mod flexi_test {
     use std::io::Result;
 
-    use flexi_logger::{DeferredNow, FileSpec, Logger, WriteMode};
+    use flexi_logger::{DeferredNow, FileSpec, LogSpecification, Logger, WriteMode};
     use log::{Record, info};
 
     #[test]
@@ -40,6 +40,7 @@ mod flexi_test {
         log::debug!("debug");
     }
 
+    // 输出到文件
     #[test]
     fn log_to_file() {
         /*  WriteMode可以取值：
@@ -65,6 +66,7 @@ mod flexi_test {
         log_handle.flush(); //当WriteMode取值为BufferAndFlush时需要手动flush
     }
 
+    // 输出到控制台
     #[test]
     fn log_to_console() {
         Logger::try_with_str("info")
@@ -77,6 +79,7 @@ mod flexi_test {
         info!("info");
     }
 
+    // 同时将日志输出到文件和控制台
     #[test]
     fn log_to_file_and_console() {
         Logger::try_with_str("info")
@@ -89,7 +92,7 @@ mod flexi_test {
                     .suffix("log") // 日志文件名后缀
                     .suppress_timestamp() // 日志名不包含日期
             )
-            // .log_to_stdout() // 不能同时存在
+            .duplicate_to_stdout(flexi_logger::Duplicate::All)
             .write_mode(WriteMode::Direct)
             .start()
             .unwrap();
@@ -97,20 +100,21 @@ mod flexi_test {
         info!("abc");
     }
 
+    // 设置日志格式进行输出
     #[test]
     fn format_log_to_console() {
         Logger::try_with_str("info")
             .unwrap()
             .log_to_stdout()
             .write_mode(WriteMode::Direct)
-            .format(log_format)
+            .format(file_log_format)
             .start()
             .unwrap();
 
         log::info!("info");
     }
 
-    fn log_format(
+    fn file_log_format(
         w: &mut dyn std::io::Write,
         now: &mut DeferredNow,
         record: &Record,
@@ -126,4 +130,33 @@ mod flexi_test {
             &record.args()                                  // 日志内容
         )
     }
+
+
+
+    // 输出到文件中的日志和控制台中的日志格式不同
+    #[test]
+    fn file_format_and_console_format() {
+        let log_specification = LogSpecification::builder().default(log::LevelFilter::Info).build();
+        Logger::with(log_specification)
+            .format_for_files(file_log_format)
+            .format_for_stdout(console_log_format)
+            .log_to_file(FileSpec::default().directory("src/logs"))
+            .duplicate_to_stdout(flexi_logger::Duplicate::All)
+            .start()
+            .unwrap();
+
+        info!("This is a test log message.");
+    }
+
+
+
+    fn console_log_format(
+        w: &mut dyn std::io::Write,
+        _now: &mut DeferredNow,
+        record: &Record,
+    ) -> Result<()> {
+        write!( w, "{}", &record.args())
+    }
+
+
 }
