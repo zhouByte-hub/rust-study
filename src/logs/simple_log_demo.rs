@@ -1,22 +1,22 @@
 /**
+ *  simple-log = "2.3.0"
+ *
  *  Rust 实现的简单日志，支持本地文件或标准输出写入。
  */
 
 #[cfg(test)]
 mod simple_log_demo {
 
-    use simple_log::{debug, info, LogConfigBuilder};
-
+    use simple_log::{LogConfigBuilder, debug, info};
 
     #[test]
-    fn test_1(){
+    fn test_1() {
         simple_log::quick!("info");
         info!("abc");
     }
 
-
     #[test]
-    fn test_2(){
+    fn test_2() {
         let log_config = LogConfigBuilder::builder()
             .path("src/logs/simple.log")
             .size(10)

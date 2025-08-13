@@ -1,6 +1,8 @@
 use clap::{Parser, Subcommand};
 
 /**
+ * clap = {version = "4.5.43", features = ["derive"]}
+ *
  * 一个简单易用、高效且功能全面的命令行参数解析器
  * command参数：
  *      version：自动使用 Cargo.toml 中的 version 字段作为程序版本。

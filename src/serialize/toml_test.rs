@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 /**
+ * toml = "0.9.5"
+ *
 * 一个兼容 serde 的 TOML 解析库，也就是说toml库是serde的一个实现库。
 * TOML 本身是一种简单、易用且可读的配置格式，TOML就是一个增强版的ini。
 *

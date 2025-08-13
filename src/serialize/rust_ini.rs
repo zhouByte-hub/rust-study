@@ -1,4 +1,6 @@
 /**
+ * rust-ini = "0.21"
+ *
  * ini文件的格式如下：section下其实是一个map，可以使用迭代器进行遍历
  * [section]
  * key = value

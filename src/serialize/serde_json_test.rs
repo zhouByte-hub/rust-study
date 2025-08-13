@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 /**
- * serde_json是对serde的一种json方式的序列化和反序列化的方式
- *
  * serde_json = "1.0.142"
+ *
+ * serde_json是对serde的一种json方式的序列化和反序列化的方式
  */
 
 #[derive(Debug, Serialize, Deserialize)]
