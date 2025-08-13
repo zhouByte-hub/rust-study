@@ -4,7 +4,7 @@
 
 #[cfg(test)]
 mod pretty_test {
-
+    use log::{warn, info, error};
     extern crate pretty_env_logger;
 
     #[test]
