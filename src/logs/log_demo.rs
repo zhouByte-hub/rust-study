@@ -7,10 +7,10 @@
  */
 #[cfg(test)]
 mod log_test {
-    
+
     #[test]
-    fn test_1(){
-        log::info!("info");     // 没有输出
-        log::trace!("trace");   // 没有输出
+    fn test_1() {
+        log::info!("info"); // 没有输出
+        log::trace!("trace"); // 没有输出
     }
 }
