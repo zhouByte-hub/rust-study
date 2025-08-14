@@ -1,5 +1,5 @@
 /**
- * include_dir = "0.7.4"
+ * include_dir = {version = "0.7.4", features=["glob"]}
  * 
  * 将目录内容嵌入到你的二进制文件中
  * 对 include_str!() 和 include_bytes!() 宏的演进，用于将整个目录树嵌入到你的二进制文件中。
