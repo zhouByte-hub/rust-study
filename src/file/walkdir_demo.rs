@@ -13,7 +13,7 @@ mod walkdir_test{
     fn test_1() {
         let dir = WalkDir::new("E:\\project\\rust\\rust-study\\rust_async");
         for item in dir {
-            let file = item.unwrap();
+            let file = item.unwrap();   // 得到的和fs::read_dir一致
             println!("==================================================");
             println!("{}", file.file_name().to_string_lossy()); // file_name返回的是OsStr类型
             println!("{:?}", file.file_type());    // fs::FileType类型
