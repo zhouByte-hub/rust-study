@@ -6,7 +6,7 @@ description = "rust-study"
 
 [workspace]
 name = "rust-study"
-members = ["rust_basic", "rust_async", "rust_net"]
+members = ["rust_basic", "rust_async", "rust_net", "rust_include_dir"]
 
 
 [[bin]]
@@ -33,3 +33,4 @@ simple-log = "2.3.0"
 
 # file
 walkdir = "2.5.0"
+include_dir = {version = "0.7.4", features=["glob"]}
