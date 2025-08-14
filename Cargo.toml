@@ -35,3 +35,4 @@ simple-log = "2.3.0"
 walkdir = "2.5.0"
 include_dir = {version = "0.7.4", features=["glob"]}
 tempfile = "3.20.0"
+zip = "4.3.0"
