@@ -3,3 +3,4 @@ pub mod rust_self;
 pub mod include_dir_demo;
 pub mod temp_file;
 pub mod zip_demo;
+pub mod tar_demo;
