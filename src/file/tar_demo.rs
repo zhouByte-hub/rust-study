@@ -32,8 +32,7 @@ mod tar_test{
         let mut archive =  Archive::new(file);
         for item in archive.entries().unwrap(){
             let file = item.unwrap();
-            println!("{}-{}", file.path().unwrap(), file.header().size());
+            println!("{:?}-{:?}", file.path().unwrap(), file.header().size());
         }
-
     }
 }
