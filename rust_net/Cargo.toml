@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 tracing = "0.1.41"
 url = "2.5.4"
+ipnet = "2.11.0"
