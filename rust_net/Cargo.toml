@@ -10,3 +10,6 @@ ipnet = "2.11.0"
 netdev = "0.37.1"
 http-types = "2.12.0"
 stunclient = "0.4.1"
+reqwest = {version = "0.12.23", features=["json", "gzip", "stream"]}
+tokio = {version="1.47.1", features = ["full"]}
+futures-util = "0.3.31"

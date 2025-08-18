@@ -5,32 +5,36 @@
  */
 
 #[cfg(test)]
-mod spawn_test{
+mod spawn_test {
 
     #[tokio::test]
-    async fn test_1(){
+    async fn test_1() {
         tokio::spawn(async move {
             let mut result = 0;
             for i in 0..100 {
                 result += i;
             }
             println!("{}", result);
-        }).await.unwrap();
+        })
+        .await
+        .unwrap();
     }
 
     #[tokio::test]
-    async fn test_2(){
+    async fn test_2() {
         tokio::task::spawn_blocking(move || {
             let mut result = 0;
             for i in 0..100 {
                 result += i;
             }
             println!("{}", result);
-        }).await.unwrap();
+        })
+        .await
+        .unwrap();
     }
 
     #[tokio::test]
-    async fn wait_test(){
+    async fn wait_test() {
         // 对于已经知道个数的任务，可以使用tokio::join!
         // tokio::join!(test_1(), test_2());
 

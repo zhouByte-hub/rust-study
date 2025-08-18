@@ -4,9 +4,8 @@
  */
 
 #[cfg(test)]
-mod temp_test{
+mod temp_test {
     use std::io::{Read, Write};
-
 
     #[test]
     fn temp_file_test() {
@@ -25,17 +24,15 @@ mod temp_test{
         println!("{:?}", String::from_utf8(read_content[0..length].to_vec()));
     }
 
-
     #[test]
-    fn temp_dir_test(){
+    fn temp_dir_test() {
         let temp_dir = tempfile::tempdir().unwrap();
         println!("{:?}", temp_dir.path());
         // temp_dir.close().unwrap();
     }
 
-
     #[test]
-    fn temp_file_in_temp_dir(){
+    fn temp_file_in_temp_dir() {
         let dir = tempfile::tempdir().unwrap();
         let mut file = tempfile::tempfile_in(&dir).unwrap();
 
@@ -45,10 +42,12 @@ mod temp_test{
         file.flush().unwrap();
     }
 
-
     #[test]
-    fn read_test(){
-        let content = std::fs::read_to_string("C:\\Users\\Time_Travel\\AppData\\Local\\Temp\\.tmpABNFP2\\.tmpDktaZJ").unwrap();
+    fn read_test() {
+        let content = std::fs::read_to_string(
+            "C:\\Users\\Time_Travel\\AppData\\Local\\Temp\\.tmpABNFP2\\.tmpDktaZJ",
+        )
+        .unwrap();
         println!("{}", content);
     }
 }

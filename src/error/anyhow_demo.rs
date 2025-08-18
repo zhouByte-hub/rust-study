@@ -1,12 +1,11 @@
-
 /**
  * anyhow = "1.0.99"
- * 
+ *
  * 该库提供 anyhow::Error ，一种基于特征对象的错误类型，用于在 Rust 应用程序中轻松进行惯用的错误处理。
  */
 
 #[cfg(test)]
-mod anyhow_test{
+mod anyhow_test {
     use anyhow::{Context, Ok, Result};
 
     /**
@@ -15,9 +14,7 @@ mod anyhow_test{
     #[test]
     fn test() -> Result<()> {
         // 唯一有点用的就是上下文，可以帮助调试代码
-        std::fs::read_to_string("abc").with_context(|| {
-            format!("出现了错误")
-        })?;
+        std::fs::read_to_string("abc").with_context(|| format!("出现了错误"))?;
         Ok(())
     }
 }
