@@ -87,7 +87,7 @@ pub async fn oneshot_message() -> Result<(), Error> {
 
     handle.await?;
 
-    let a: &'static str = rx.await.unwrap();
+    rx.await.unwrap();
     Ok(())
 }
 
