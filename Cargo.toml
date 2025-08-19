@@ -41,3 +41,5 @@ tar = "0.4.44"
 # error
 thiserror = "2.0.14"
 anyhow = "1.0.99"
+
+os_info = "3.12.0"
