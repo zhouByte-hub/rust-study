@@ -42,4 +42,6 @@ tar = "0.4.44"
 thiserror = "2.0.14"
 anyhow = "1.0.99"
 
+# system
 os_info = "3.12.0"
+num_cpus = "1.17.0"
