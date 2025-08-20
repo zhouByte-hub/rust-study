@@ -6,7 +6,7 @@ description = "rust-study"
 
 [workspace]
 name = "rust-study"
-members = ["rust_basic", "rust_async", "rust_net", "rust_include_dir"]
+members = ["rust_basic", "rust_async", "rust_net", "rust_include_dir", "rust_actix"]
 
 
 [[bin]]
