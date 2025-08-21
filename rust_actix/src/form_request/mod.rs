@@ -1,4 +1,5 @@
 pub mod form;
+pub mod handler;
 pub mod json;
 /**
  * Actix Web 提供了一种类型安全的请求信息访问机制，称为提取器（即 impl FromRequest ）。有许多内置的提取器实现（参见实现者）。
@@ -12,4 +13,4 @@ pub mod json;
  */
 pub mod path;
 pub mod query;
-pub mod handler;
+pub mod websocket;

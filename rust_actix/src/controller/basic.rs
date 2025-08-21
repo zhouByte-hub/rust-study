@@ -1,7 +1,7 @@
 use crate::AppState;
-use actix_web::{HttpResponse, Responder, get, post, web};
 use actix_web::guard::Guard;
 use actix_web::http;
+use actix_web::{HttpResponse, Responder, get, post, web};
 
 #[get("/hello_world")]
 pub async fn helloworld() -> impl Responder {
@@ -34,12 +34,13 @@ pub fn basic_path_config(service_config: &mut web::ServiceConfig) {
     service_config.service(user_scope);
 }
 
-
 // 自定义路由守卫
 struct MyGuard;
 
 impl Guard for MyGuard {
     fn check(&self, ctx: &actix_web::guard::GuardContext<'_>) -> bool {
-        ctx.head().headers().contains_key(http::header::CONTENT_TYPE)
+        ctx.head()
+            .headers()
+            .contains_key(http::header::CONTENT_TYPE)
     }
 }
