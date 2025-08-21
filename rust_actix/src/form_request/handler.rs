@@ -1,5 +1,3 @@
-use std::{thread, time::Duration};
-
 use actix_web::{
     HttpResponse, Responder, Result, get,
     web::{self, Bytes},
