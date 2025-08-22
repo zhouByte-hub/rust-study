@@ -37,7 +37,7 @@ mod mysql_test {
             .await
             .expect("数据库连接失败");
         let list = dict::Entity::find()
-            .order_by_asc(dict::Column::Id)
+            .order_by_asc(dict::Column::Id)     //  排序
             .all(&db)
             .await
             .unwrap();
@@ -65,6 +65,7 @@ mod mysql_test {
             .expect("数据库连接失败");
         let list = dict::Entity::find()
             .filter(dict::Column::GroupCode.eq("CART_TYPE"))
+            // .filter(dict::Column::Id.is_in([1,2,3,4,5]))    // 范围查询
             .all(&db)
             .await
             .unwrap();
@@ -122,5 +123,83 @@ mod mysql_test {
             .await
             .unwrap();
         println!("{:?}", result); // DeleteResult { rows_affected: 1 }
+    }
+}
+
+/***************************************************高级操作*****************************************************/
+mod advantange_test {
+    use std::{thread, time::Duration};
+
+    use crate::database::models::dict;
+    use sea_orm::{
+        ActiveModelTrait, ActiveValue, ColumnTrait, Database, EntityTrait, PaginatorTrait,
+        QueryFilter, QueryOrder, prelude::Expr,
+    };
+
+    // 分页
+    #[tokio::test]
+    async fn pagination_test() {
+        let db = Database::connect("mysql://root:123456@127.0.0.1:3306/driver_test")
+            .await
+            .expect("数据库连接失败");
+        let mut paginate = dict::Entity::find()
+            .order_by_desc(dict::Column::Id)
+            .paginate(&db, 10);
+
+        // fetch_page(0); // offset
+        // fetch(); // 查询出当前页的数据，使用的是默认值，调用next()可以使默认值 + 1，也就是页数的移动
+        // fetch_and_next(); // 在内部一直迭代，知道全部页都走完
+        while let Some(item) = paginate.fetch_and_next().await.unwrap() {
+            println!("{:?}", item);
+        }
+        // dict::Entity::find().count(&db).await.unwrap(); // 可以获取总条数
+    }
+
+    #[tokio::test]
+    async fn many_insert_test() {
+        let db = Database::connect("mysql://root:123456@127.0.0.1:3306/driver_test")
+            .await
+            .expect("数据库连接失败");
+        let dict_1 = dict::ActiveModel {
+            id: ActiveValue::NotSet,
+            dict_name: ActiveValue::Set("dict_1".to_string()),
+            dict_code: ActiveValue::Set("dict_1".to_string()),
+            remark: ActiveValue::Set(Some("dict_1".to_string())),
+            group_code: ActiveValue::Set("CART_TYPE".to_string()),
+        };
+        let dict_2 = dict::ActiveModel {
+            id: ActiveValue::NotSet,
+            dict_name: ActiveValue::Set("dict_2".to_string()),
+            dict_code: ActiveValue::Set("dict_2".to_string()),
+            remark: ActiveValue::Set(Some("dict_2".to_string())),
+            group_code: ActiveValue::Set("CART_TYPE".to_string()),
+        };
+        // 正确的批量插入方式：使用Entity::insert_many
+        let result = dict::Entity::insert_many(vec![dict_1, dict_2])
+            .exec(&db)
+            .await
+            .unwrap();
+        println!("批量插入结果: {:?}", result);
+    }
+
+
+    // save是一个辅助方法，用于将 ActiveModel 保存（插入/更新）到数据库中。
+    #[tokio::test]
+    async fn save_test(){
+        let db = Database::connect("mysql://root:123456@127.0.0.1:3306/driver_test")
+            .await
+            .expect("数据库连接失败");
+
+        let obj = dict::ActiveModel {
+            id: ActiveValue::NotSet,
+            dict_name: ActiveValue::Set("dict_1".to_string()),
+            dict_code: ActiveValue::Set("dict_1".to_string()),
+            remark: ActiveValue::Set(Some("dict_1".to_string())),
+            group_code: ActiveValue::Set("CART_TYPE".to_string()),
+        };
+    
+        // 正确的save方法调用：使用实例方法并添加await
+        let result = obj.save(&db).await.expect("保存失败");
+        println!("保存结果: {:?}", result);
     }
 }

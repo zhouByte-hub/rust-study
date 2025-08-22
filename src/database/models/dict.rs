@@ -8,6 +8,7 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = true)]
     pub id: i32,
     #[sea_orm(unique)]
+    // #[serde(skip_deserializing)] // Skip deserializing
     pub dict_name: String,
     #[sea_orm(unique)]
     pub dict_code: String,
