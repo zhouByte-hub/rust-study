@@ -1,10 +1,10 @@
-use actix_web::{rt, Error, HttpRequest, HttpResponse, get, web};
+use actix_web::{Error, HttpRequest, HttpResponse, get, rt, web};
 use actix_ws::AggregatedMessage;
 use futures_util::StreamExt;
 
 /**
  * actix-ws = "0.3.0"
- * 
+ *
  * Actix Web 通过 actix-ws crate 支持 WebSocket 的高级接口。
  * 使用这个 crate，可以将请求的 Payload 流转换为 ws::Messages 流，然后在创建的异步任务中对其做出响应。
  */

@@ -5,7 +5,6 @@ pub mod prelude;
 /**
  * 数据库里的所有实体都是通过sea-orm-cli来实现，一行命令就会创建所有的实体类
  */
-
 pub mod city;
 pub mod dict;
 pub mod dict_group;
