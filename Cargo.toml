@@ -51,3 +51,10 @@ mac_address = "1.1.8"
 
 # web
 qrcode-generator = "5.0.0"
+
+# windows
+winapi = "0.3.9"
+
+# database
+sea-orm = {version = "1.1.14",features = ["sqlx-mysql", "runtime-tokio-rustls", "macros"]}
+tokio = {version="1.47.1", features = ["full"]}

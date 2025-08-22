@@ -5,5 +5,7 @@ pub mod serialize;
 pub mod shell;
 pub mod system;
 pub mod web;
+pub mod windows;
+pub mod database;
 
 fn main() {}
