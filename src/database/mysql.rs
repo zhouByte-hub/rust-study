@@ -221,8 +221,8 @@ mod mysql_test {
 mod advantange_test {
     use crate::database::models::{city, dict, dict_group, driving_school};
     use sea_orm::{
-        ActiveModelTrait, ActiveValue, ColumnTrait, Database, EntityTrait, JoinType,
-        PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait,
+        ActiveModelTrait, ActiveValue, ColumnTrait, Condition, Database, EntityTrait, JoinType,
+        PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait, sea_query::Query,
     };
 
     // 分页
@@ -352,5 +352,38 @@ mod advantange_test {
         }
         // left_join、right_join、inner_join、full_join默认使用的是预定义好的关联关系
         // dict_group::Entity::find().left_join(dict::Entity).all(&db).await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn sub_query() {
+        let db = Database::connect("mysql://root:123456@127.0.0.1:3306/driver_test")
+            .await
+            .expect("数据库连接失败");
+        let result = dict::Entity::find()
+            .filter(
+                Condition::any()
+                    .add(
+                        dict::Column::Id.in_subquery(
+                            Query::select()
+                                .expr(dict::Column::Id.max())
+                                .from(dict::Entity)
+                                .to_owned(),
+                        ),
+                    )
+                    .add(
+                        dict::Column::Id.in_subquery(
+                            Query::select()
+                                .expr(dict::Column::Id.min())
+                                .from(dict::Entity)
+                                .to_owned(),
+                        ),
+                    ),
+            )
+            .all(&db)
+            .await
+            .unwrap();
+        for item in result {
+            println!("{:?}", item);
+        }
     }
 }
