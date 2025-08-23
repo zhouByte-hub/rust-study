@@ -2,6 +2,7 @@
 
 use crate::database::models::dict_group;
 use sea_orm::entity::prelude::*;
+use crate::database::models::dict_group;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
 #[sea_orm(table_name = "dict")]

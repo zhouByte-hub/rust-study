@@ -2,6 +2,7 @@
 
 use crate::database::models::dict;
 use sea_orm::entity::prelude::*;
+use crate::database::models::dict;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
 #[sea_orm(table_name = "dict_group")]
@@ -13,6 +14,10 @@ pub struct Model {
     pub group_code: String,
 }
 
+/**
+ * 字典组和字典的关系，一个字段组存在多个字典
+ * 如果 A has_many B，那么 B 必须 belongs_to A。
+ */
 /**
  * 字典组和字典的关系，一个字段组存在多个字典
  * 如果 A has_many B，那么 B 必须 belongs_to A。

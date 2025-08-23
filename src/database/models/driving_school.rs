@@ -2,6 +2,7 @@
 
 use crate::database::models::city;
 use sea_orm::entity::prelude::*;
+use crate::database::models::city;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
 #[sea_orm(table_name = "driving_school")]
