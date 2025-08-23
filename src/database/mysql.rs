@@ -127,14 +127,12 @@ mod mysql_test {
 }
 
 /***************************************************高级操作*****************************************************/
+#[cfg(test)]
 mod advantange_test {
-    use std::{thread, time::Duration};
+    use std::ptr::eq;
 
-    use crate::database::models::dict;
-    use sea_orm::{
-        ActiveModelTrait, ActiveValue, ColumnTrait, Database, EntityTrait, PaginatorTrait,
-        QueryFilter, QueryOrder, prelude::Expr,
-    };
+    use crate::database::models::{city, dict, dict_group, driving_school};
+    use sea_orm::{ActiveModelTrait, ActiveValue, ColumnTrait, Database, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder};
 
     // 分页
     #[tokio::test]
@@ -201,5 +199,40 @@ mod advantange_test {
         // 正确的save方法调用：使用实例方法并添加await
         let result = obj.save(&db).await.expect("保存失败");
         println!("保存结果: {:?}", result);
+    }
+
+
+    // 一对多的查询
+    #[tokio::test]
+    async fn many_test() {
+        let db = Database::connect("mysql://root:123456@127.0.0.1:3306/driver_test")
+            .await
+            .expect("数据库连接失败");
+        let result = dict_group::Entity::find().filter(dict_group::Column::GroupCode.eq("abc")).find_with_related(dict::Entity).all(&db).await.unwrap();
+        for item in result {
+            println!("dict_group = {:?}", item.0);
+            for dict in item.1 {
+                println!("dict = {:?}", dict);
+            }
+        }
+        println!("end");
+    }
+
+    // 一对一的查询
+    #[tokio::test]
+    async fn one_to_one_test() {
+        let db = Database::connect("mysql://root:123456@127.0.0.1:3306/driver_test")
+            .await
+            .expect("数据库连接失败");
+
+        // 对于一对一来说需要调用 find_also_related 方法
+        let result = city::Entity::find().find_also_related(driving_school::Entity).all(&db).await.unwrap();
+        for model in result {
+            println!("city = {:?}", model.0);
+            if let Some(school) = model.1 {
+                println!("school = {:?}", school);
+            }
+        }
+        println!("end");
     }
 }
