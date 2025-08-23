@@ -221,9 +221,9 @@ mod mysql_test {
 mod advantange_test {
     use crate::database::models::{city, dict, dict_group, driving_school};
     use sea_orm::{
-        ActiveModelTrait, ActiveValue, ColumnTrait, Condition, Database, EntityTrait, JoinType,
-        PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait, sea_query::Query,
+        sea_query::Query, ActiveModelTrait, ActiveValue, ColumnTrait, Condition, Database, EntityTrait, JoinType, PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait, TransactionTrait
     };
+    use tokio_stream::StreamExt;
 
     // 分页
     #[tokio::test]
@@ -385,5 +385,26 @@ mod advantange_test {
         for item in result {
             println!("{:?}", item);
         }
+    }
+
+    #[tokio::test]
+    async fn transaction_and_stream() {
+        let db = Database::connect("mysql://root:123456@127.0.0.1:3306/driver_test")
+            .await
+            .expect("数据库连接失败");
+
+        // 事务开启
+        let txn = db.begin().await.unwrap();
+        {
+            // 流式响应
+            let mut dict_list = dict::Entity::find().stream(&txn).await.unwrap();
+            while let Some(dict) = dict_list.next().await {
+                match dict {
+                    Ok(value) => println!("{:?}", value),
+                    Err(e) => println!("{:?}", e)
+                }
+            }
+        }
+        txn.commit().await.unwrap(); // 事务提交
     }
 }
