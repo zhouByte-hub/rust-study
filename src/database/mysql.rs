@@ -221,7 +221,9 @@ mod mysql_test {
 mod advantange_test {
     use crate::database::models::{city, dict, dict_group, driving_school};
     use sea_orm::{
-        sea_query::Query, ActiveModelTrait, ActiveValue, ColumnTrait, Condition, Database, EntityTrait, JoinType, PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait, TransactionTrait
+        ActiveModelTrait, ActiveValue, ColumnTrait, Condition, Database, EntityTrait, JoinType,
+        PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait, TransactionTrait,
+        sea_query::Query,
     };
     use tokio_stream::StreamExt;
 
@@ -401,7 +403,7 @@ mod advantange_test {
             while let Some(dict) = dict_list.next().await {
                 match dict {
                     Ok(value) => println!("{:?}", value),
-                    Err(e) => println!("{:?}", e)
+                    Err(e) => println!("{:?}", e),
                 }
             }
         }

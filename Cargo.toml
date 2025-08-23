@@ -59,3 +59,4 @@ winapi = "0.3.9"
 sea-orm = {version = "1.1.14",features = ["sqlx-mysql", "sqlx-postgres", "runtime-tokio-rustls", "macros"]}
 tokio = {version="1.47.1", features = ["full"]}
 tokio-stream = {version = "0.1.17", features = ["sync"] }
+redis = {version = "0.32.5", features = ["r2d2", "tokio-comp"]}
