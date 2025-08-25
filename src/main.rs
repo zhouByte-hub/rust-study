@@ -7,5 +7,6 @@ pub mod shell;
 pub mod system;
 pub mod web;
 pub mod windows;
+pub mod other;
 
 fn main() {}
