@@ -14,7 +14,7 @@ mod include_test {
     use include_dir::{Dir, include_dir};
 
     // 在编译时会判断文件是否存在，因为需要被编译到二进制中
-    static FILE_DIR: Dir = include_dir!("E:\\project\\rust\\rust-study\\src\\file");
+    static FILE_DIR: Dir = include_dir!("/Users/zhoujianing/Project/rust/rust-study/src/file");
 
     #[test]
     fn test() {
@@ -24,7 +24,8 @@ mod include_test {
         println!("{}", content);
     }
 
-    static SERIALIZE_DIR: Dir = include_dir!("E:\\project\\rust\\rust-study\\src\\serialize");
+    static SERIALIZE_DIR: Dir =
+        include_dir!("/Users/zhoujianing/Project/rust/rust-study/src/serialize");
     #[test]
     fn pattern_test() {
         for item in SERIALIZE_DIR.find("**/*.ini").unwrap() {

@@ -62,7 +62,7 @@ mod redis_test {
     }
 
     #[test]
-    fn delete_test(){
+    fn delete_test() {
         let client = redis::Client::open("redis://127.0.0.1:6379").unwrap();
         let mut conn = client.get_connection().unwrap();
 
@@ -76,16 +76,18 @@ mod redis_test {
     }
 }
 
-
 /***********************************高级操作：Stream**************************************/
 #[cfg(test)]
-mod advance_test{
+mod advance_test {
 
-    use redis::{streams::{StreamId, StreamKey, StreamMaxlen, StreamReadOptions, StreamReadReply}, Commands};
+    use redis::{
+        Commands,
+        streams::{StreamId, StreamKey, StreamMaxlen, StreamReadOptions, StreamReadReply},
+    };
 
     // 消息生产者
     #[tokio::test]
-    async fn stream_producer_test(){
+    async fn stream_producer_test() {
         let client = redis::Client::open("redis://127.0.0.1:6379").unwrap();
         let mut conn = client.get_connection().unwrap();
 
@@ -98,7 +100,7 @@ mod advance_test{
 
     // 消息消费者
     #[tokio::test]
-    async fn stream_consumer_test(){
+    async fn stream_consumer_test() {
         let client = redis::Client::open("redis://127.0.0.1:6379").unwrap();
         let mut conn = client.get_connection().unwrap();
 
@@ -106,9 +108,12 @@ mod advance_test{
         let xgroup: Result<(), _> = conn.xgroup_create_mkstream("stream", "consumer_group_1", "0");
         match xgroup {
             Ok(_) => println!("消费者创建成功"),
-            Err(e) => println!("消费者创建失败: {:?}", e)
+            Err(e) => println!("消费者创建失败: {:?}", e),
         }
-        let options = StreamReadOptions::default().block(1000).count(1).group("consumer_group_1", "test_1");
+        let options = StreamReadOptions::default()
+            .block(1000)
+            .count(1)
+            .group("consumer_group_1", "test_1");
         // > 的含义是：返回当前消费者组中尚未被任何消费者处理的新消息
         let read: StreamReadReply = conn.xread_options(&["stream"], &[">"], &options).unwrap();
         if !read.keys.is_empty() {
@@ -122,11 +127,10 @@ mod advance_test{
                     println!("ark: {}", ark); // 1 表示成功
                 }
             }
-        }else{
+        } else {
             println!("当前key没有消息");
         }
     }
-
 
     // // 获取待处理的消息条数
     // #[tokio::test]
@@ -149,7 +153,9 @@ mod advance_test{
         let mut conn = client.get_connection().unwrap();
 
         // 1、删除消费者组
-        let delete_group_result: usize = conn.xgroup_destroy::<&str, &str, usize>("stream", "consumer_group_1").unwrap();
+        let delete_group_result: usize = conn
+            .xgroup_destroy::<&str, &str, usize>("stream", "consumer_group_1")
+            .unwrap();
         println!("delete_group_result: {}", delete_group_result); // 1 表示删除成功
 
         // 2、清空流
