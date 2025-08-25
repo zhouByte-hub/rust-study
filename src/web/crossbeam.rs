@@ -15,7 +15,7 @@
  */
 #[cfg(test)]
 mod crossbeam_test {
-    use std::{sync::Arc, thread};
+    use std::{sync::{mpsc::channel, Arc}, thread};
 
     use crossbeam_queue::{ArrayQueue, SegQueue};
 
@@ -58,5 +58,20 @@ mod crossbeam_test {
                 println!("item = {}", item);
             }
         }).join().unwrap();
+    }
+
+    #[test]
+    fn test_3() {
+        let (sender, receiver) = channel();
+
+        thread::spawn(move || {
+            for i in 0..10 {
+                sender.send(i).unwrap();
+            }
+        }).join().unwrap();
+
+        for i in receiver {
+            println!("i = {}", i);
+        }
     }
 }
