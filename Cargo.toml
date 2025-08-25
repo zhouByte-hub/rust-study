@@ -9,9 +9,9 @@ name = "rust-study"
 members = ["rust_basic", "rust_async", "rust_net", "rust_include_dir", "rust_actix"]
 
 
-[[bin]]
-name = "clap_demo"
-path = "src/shell/clap_demo.rs"
+#[[bin]]
+#name = "clap_demo"
+#path = "src/shell/clap_demo.rs"
 
 [dependencies]
 duct = "1.0.0"
@@ -51,15 +51,17 @@ mac_address = "1.1.8"
 
 # web
 qrcode-generator = "5.0.0"
+crossbeam-queue = "0.3.12"
 
 # windows
 winapi = "0.3.9"
 
-[target.'cfg(target_os = "macos")'.dependencies]    ## windows、macos、linux、unix
-rust-embed = {version = "8.7.2", features = ["include-exclude"]}
 
 # database
 sea-orm = {version = "1.1.14",features = ["sqlx-mysql", "sqlx-postgres", "runtime-tokio-rustls", "macros"]}
 tokio = {version="1.47.1", features = ["full"]}
 tokio-stream = {version = "0.1.17", features = ["sync"] }
 redis = {version = "0.32.5", features = ["r2d2", "tokio-comp", "json"]}
+
+[target.'cfg(target_os = "macos")'.dependencies]    ## windows、macos、linux、unix
+rust-embed = {version = "8.7.2", features = ["include-exclude"]}
