@@ -1,4 +1,4 @@
-use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer};
+use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
 
 /**
  * Actix Web 是一个强大、实用且极快的老牌 Rust Web 框架。
@@ -29,16 +29,16 @@ async fn handle_web_request(req: HttpRequest) -> HttpResponse {
     let content_type = mime_guess::from_path(&path).first_or_octet_stream();
     if path == "/" || path.is_empty() {
         let file = WebFront::get("html/login.html");
-            return match file {
+        return match file {
             Some(body) => HttpResponse::Ok().content_type("text/html").body(body.data),
             None => HttpResponse::Ok().body("404"),
-        }
+        };
     }
     let file = WebFront::get(&path);
     match file {
-        Some(body) => {
-            HttpResponse::Ok().content_type(content_type.as_ref()).body(body.data)
-        }
+        Some(body) => HttpResponse::Ok()
+            .content_type(content_type.as_ref())
+            .body(body.data),
         None => HttpResponse::Ok().body("404"),
     }
 }

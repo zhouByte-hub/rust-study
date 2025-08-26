@@ -15,7 +15,10 @@
  */
 #[cfg(test)]
 mod crossbeam_test {
-    use std::{sync::{mpsc::channel, Arc}, thread};
+    use std::{
+        sync::{Arc, mpsc::channel},
+        thread,
+    };
 
     use crossbeam_queue::{ArrayQueue, SegQueue};
 
@@ -51,13 +54,17 @@ mod crossbeam_test {
                     Err(e) => println!("push failed = {}", e), // 11 ~ 19都会走这个分支
                 }
             }
-        }).join().unwrap();
+        })
+        .join()
+        .unwrap();
 
         thread::spawn(move || {
             while let Some(item) = queue_clone.pop() {
                 println!("item = {}", item);
             }
-        }).join().unwrap();
+        })
+        .join()
+        .unwrap();
     }
 
     #[test]
@@ -68,7 +75,9 @@ mod crossbeam_test {
             for i in 0..10 {
                 sender.send(i).unwrap();
             }
-        }).join().unwrap();
+        })
+        .join()
+        .unwrap();
 
         for i in receiver {
             println!("i = {}", i);
