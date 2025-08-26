@@ -9,3 +9,7 @@ serde = {version="1.0", features = ["derive"]}
 serde_json = "1.0.142"
 futures-util = "0.3.31"
 actix-ws = "0.3.0"
+mime_guess = "2.0.5"
+
+[target.'cfg(target_os = "macos")'.dependencies]    ## windows、macos、linux、unix
+rust-embed = {version = "8.7.2", features = ["include-exclude"]}

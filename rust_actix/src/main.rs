@@ -1,4 +1,4 @@
-use actix_web::{App, HttpServer};
+use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer};
 
 /**
  * Actix Web 是一个强大、实用且极快的老牌 Rust Web 框架。
@@ -9,12 +9,38 @@ use actix_web::{App, HttpServer};
 pub mod controller;
 pub mod form_request;
 use crate::controller::{basic, json};
+use rust_embed::RustEmbed;
 
 /**
  * 应用程序状态: 应用程序状态在相同作用域内的所有路由和资源之间共享。状态可以通过 web::Data<T> 提取器访问
  */
 pub struct AppState {
     app_name: String,
+}
+
+#[derive(RustEmbed)]
+#[folder = "web-front"]
+pub struct WebFront;
+
+async fn handle_web_request(req: HttpRequest) -> HttpResponse {
+    // 从请求中提取路径参数，是{path:.*}部分，不包含 /front 部分
+    let path = req.match_info().query("path").to_string();
+    println!("path: {}", path);
+    let content_type = mime_guess::from_path(&path).first_or_octet_stream();
+    if path == "/" || path.is_empty() {
+        let file = WebFront::get("html/login.html");
+            return match file {
+            Some(body) => HttpResponse::Ok().content_type("text/html").body(body.data),
+            None => HttpResponse::Ok().body("404"),
+        }
+    }
+    let file = WebFront::get(&path);
+    match file {
+        Some(body) => {
+            HttpResponse::Ok().content_type(content_type.as_ref()).body(body.data)
+        }
+        None => HttpResponse::Ok().body("404"),
+    }
 }
 
 #[actix_web::main]
@@ -35,6 +61,7 @@ async fn main() {
             .configure(form_request::json::json_config_service)
             .configure(form_request::form::form_config_service)
             .configure(form_request::query::query_config_service)
+            .route("/front/{path:.*}", web::get().to(handle_web_request))
     })
     .workers(10)
     // .keep_alive(val)
