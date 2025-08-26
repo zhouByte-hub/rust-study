@@ -3,3 +3,4 @@ pub mod mac_address_demo;
 pub mod num_cpus_demo;
 pub mod os_info_demo;
 pub mod shutdown;
+pub mod bytes_demo;
