@@ -72,5 +72,9 @@ regex = "1.11.2"
 hex = "0.4.3"
 sha2 = "0.10.9"
 
+[dev-dependencies]
+mockall = "0.13.1"
+httpmock = "0.7.0"
+
 [target.'cfg(target_os = "macos")'.dependencies]    ## windows、macos、linux、unix
 rust-embed = {version = "8.7.2", features = ["include-exclude"]}

@@ -1,4 +1,5 @@
-pub mod wild;
-pub mod regex_demo;
 pub mod hex_demo;
+pub mod mack;
+pub mod regex_demo;
 pub mod sha;
+pub mod wild;
