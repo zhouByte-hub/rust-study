@@ -82,6 +82,7 @@ rust-study/
 - **lettre**: 功能强大、异步友好的邮件发送库，支持 SMTP 协议
 - **jsonwebtoken**: JSON Web Token (JWT) 库，支持多种签名算法
 - **qrcode-generator**: 生成 QR 码矩阵和图像，支持 PNG 和 SVG 格式
+- **handlebars**: 强大的模板引擎库，实现了 Handlebars.js 的大部分功能，支持字符串模板和文件模板
 - **crossbeam-queue**: 无锁队列实现
 - **ringbuf**: 无锁的单生产者单消费者 FIFO 环形缓冲区
 - **mime_guess**: 根据文件扩展名猜测 MIME 类型
@@ -132,7 +133,7 @@ rust-study/
 | `serde_json` | `Serde` 的一个具体实现，用于将对象序列化成 JSON。 |
 | `rust-ini` | 一个用于解析 Ini 配置文件的库。 |
 | `toml` | 一个原生的 Rust 编码器和解码器，用于处理 TOML 格式。 |
-| `config` | 一个分层的配置系统，支持多种文件格式（ini, json, yaml, toml 等），但不支持写回。 |
+| `config` | 一个分层的配置系统，支持多种文件格式（ini, json, yaml, toml, ron, json5 等），提供统一的配置读取接口，但不支持写回。 |
 
 ### 日志
 
@@ -152,7 +153,7 @@ rust-study/
 | `tempfile` | 一个安全、跨平台的临时文件和目录创建库。 |
 | `zip` | 一个支持读写简单 ZIP 文件的 Rust 库。 |
 | `tar` | 一个用于处理 TAR 文件格式的 Rust 库。 |
-| `rust-embed` | 用于将 CSS、JS 和图片等静态资源嵌入到单个可执行文件中。 |
+| `rust-embed` | 用于将静态资源（如 HTML、CSS、JS、图片等）嵌入到单个可执行文件中，支持目录结构和文件访问，适合构建独立的 Web 应用程序。 |
 
 ### 网络与Web
 
@@ -162,6 +163,7 @@ rust-study/
 | `jsonwebtoken` | Rust 生态中一个非常流行且成熟的 JSON Web Token (JWT) 库。它允许你在 Rust 程序中方便地创建、验证和解析 JWT。 |
 | `qrcode-generator` | 在 RAW、PNG 和 SVG 格式中生成 QR 码矩阵和图像的 Rust 库。 |
 | `mime_guess` | 根据文件扩展名猜测 MIME 类型的库。 |
+| `handlebars` | Rust 的模板引擎库，实现了 Handlebars.js 的大部分功能，支持模板定义、数据填充和文本输出生成。 |
 
 ### 系统与平台
 
@@ -186,6 +188,7 @@ rust-study/
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
 | `tokio` | 一个事件驱动的非阻塞 I/O 平台，用于编写异步应用程序。 |
+| `tokio-stream` | 为 Tokio 异步运行时提供 Stream trait 的实现，支持异步流处理。 |
 | `crossbeam-queue` | 无锁队列实现，提供高性能的并发操作。 |
 | `ringbuf` | 无锁的单生产者单消费者 FIFO 环形缓冲区。 |
 
@@ -203,6 +206,7 @@ rust-study/
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
 | `mockall` | 一个强大的 Rust 模拟对象库，用于单元测试。 |
+| `httpmock` | 用于 HTTP 服务的模拟和测试库，可以创建模拟 HTTP 服务器来测试客户端代码。 |
 | `once_cell` | 提供单次初始化的单元格类型，用于延迟初始化。 |
 | `derive_builder` | 通过派生宏自动生成构建器模式的代码。 |
 
