@@ -23,7 +23,7 @@ use serde::{Deserialize, Serialize};
 *     Array(Array),
 *     Table(Table),
 * }
-* 而ini就只支持单一的格式String，如果碰到其他的就需要手动转换 
+* 而ini就只支持单一的格式String，如果碰到其他的就需要手动转换
 */
 
 #[derive(Debug, Serialize, Deserialize)]
