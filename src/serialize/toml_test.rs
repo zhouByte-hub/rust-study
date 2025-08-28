@@ -14,16 +14,16 @@ use serde::{Deserialize, Serialize};
 * serde = "1.0"
 *
 * TOML支持的类型如下：
-       pub enum Value {
-           String(String),
-           Integer(i64),
-           Float(f64),
-           Boolean(bool),
-           Datetime(Datetime),
-           Array(Array),
-           Table(Table),
-       }
-   ini就只支持单一的格式String，如果碰到其他的就需要手动转换
+* pub enum Value {
+*     String(String),
+*     Integer(i64),
+*     Float(f64),
+*     Boolean(bool),
+*     Datetime(Datetime),
+*     Array(Array),
+*     Table(Table),
+* }
+* 而ini就只支持单一的格式String，如果碰到其他的就需要手动转换 
 */
 
 #[derive(Debug, Serialize, Deserialize)]
