@@ -1,12 +1,114 @@
+# Rust 学习项目
+
+这是一个综合性的 Rust 学习项目，涵盖了 Rust 生态系统中的各种常用库和最佳实践。项目通过实际的代码示例展示了 Rust 在不同领域的应用。
+
+## 项目结构
+
+```
+rust-study/
+├── src/                    # 主要源代码目录
+│   ├── database/          # 数据库相关操作
+│   ├── error/            # 错误处理示例
+│   ├── file/             # 文件和目录操作
+│   ├── logs/             # 日志系统
+│   ├── other/            # 其他实用工具
+│   ├── serialize/        # 序列化和配置文件
+│   ├── shell/            # 命令行和进程管理
+│   ├── system/           # 系统相关操作
+│   ├── web/              # Web 开发相关
+│   └── windows/          # Windows 特定功能
+├── rust_basic/           # Rust 基础学习
+├── rust_async/           # 异步编程学习
+├── rust_net/             # 网络编程学习
+├── rust_actix/           # Actix Web 框架学习
+└── Cargo.toml           # 项目配置文件
+```
+
+## 功能模块
+
+### 数据库操作 (database/)
+
+- **MySQL**: 使用 sea-orm 进行 MySQL 数据库操作，包括增删改查、条件查询、分组统计等
+- **PostgreSQL**: PostgreSQL 数据库操作示例
+- **Redis**: Redis 缓存操作，包括字符串、哈希、列表等数据结构的使用
+
+### 错误处理 (error/)
+
+- **thiserror**: 用于创建专用错误类型的库，适用于需要精确错误信息的库代码
+- **anyhow**: 基于 trait 对象的错误类型，简化应用程序中的错误处理
+
+### 文件与目录操作 (file/)
+
+- **include_dir**: 用于将整个目录树嵌入到二进制文件中的宏
+- **tempfile**: 安全、跨平台的临时文件和目录创建库
+- **walkdir**: 高效地递归遍历目录，支持符号链接和目录修剪
+- **zip**: 支持 ZIP 文件的读写操作
+- **tar**: TAR 文件压缩和解压缩
+
+### 日志系统 (logs/)
+
+- **log**: 轻量级的日志接口，提供统一的日志 API
+- **env_logger**: 通过环境变量配置的日志实现
+- **pretty_env_logger**: 基于 env_logger，提供漂亮的彩色日志输出
+- **flexi_logger**: 灵活的日志记录器，支持写入文件、stderr 等多种输出
+- **simple-log**: 简单易用的日志库
+
+### 序列化与配置文件 (serialize/)
+
+- **serde**: 通用的序列化/反序列化框架
+- **serde_json**: JSON 格式的序列化和反序列化
+- **toml**: TOML 格式的配置文件处理
+- **rust-ini**: INI 格式的配置文件解析
+- **config**: 分层的配置系统，支持多种文件格式
+
+### 命令行与进程管理 (shell/)
+
+- **clap**: 易于使用、高效且功能齐全的命令行参数解析器
+- **colored**: 在终端文本中添加颜色和样式
+- **duct**: 用于运行子进程的库，简化管道构建和IO重定向
+- **duct_sh**: duct 的子 crate，方便通过 shell 字符串构建命令
+
+### 系统操作 (system/)
+
+- **os_info**: 获取操作系统信息
+- **num_cpus**: 获取机器上的 CPU 数量
+- **sys-locale**: 获取系统或应用程序当前设置的区域设置
+- **system_shutdown**: 跨平台执行关机、重启或注销操作
+- **mac_address**: 获取网络硬件的 MAC 地址
+- **bytes**: 处理字节的实用库
+
+### Web 开发 (web/)
+
+- **lettre**: 功能强大、异步友好的邮件发送库，支持 SMTP 协议
+- **jsonwebtoken**: JSON Web Token (JWT) 库，支持多种签名算法
+- **qrcode-generator**: 生成 QR 码矩阵和图像，支持 PNG 和 SVG 格式
+- **crossbeam-queue**: 无锁队列实现
+- **ringbuf**: 无锁的单生产者单消费者 FIFO 环形缓冲区
+- **mime_guess**: 根据文件扩展名猜测 MIME 类型
+
+### 其他实用工具 (other/)
+
+- **regex**: 强大的正则表达式库，支持复杂的字符串匹配和操作
+- **wildmatch**: 简单的通配符匹配库
+- **hex**: 数据与十六进制表示之间的编码和解码
+- **sha2**: 纯 Rust 实现的 SHA-2 哈希函数家族
+- **once_cell**: 单次初始化的单元格
+- **derive_builder**: 通过派生宏构建构建器模式
+
+### Windows 特定功能 (windows/)
+
+- **winapi**: 对整个 Windows API 的原始 FFI 绑定
+- **windows**: 允许调用任何 Windows API 的 crate
+
+## 依赖库详解
+
 ### 进程与Shell
 
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
 | `duct` | 一个用于运行子进程的库。它简化了管道构建和IO重定向，并能处理跨平台的兼容性问题。 |
 | `duct_sh` | `duct` 的子 crate，方便通过 shell 字符串构建命令，用于访问高级 shell 功能。 |
-| `shells` | `std::process::Command` 的封装，旨在让 Rust 的 shell 脚本编写更具吸引力。 |
 | `walkdir` | 一个跨平台的库，用于高效地递归遍历目录，支持符号链接和目录修剪。 |
-| `runas` | 一个简单的 Rust 库，可以以 root 身份执行命令。 |
 
 ### 命令行
 
@@ -21,7 +123,6 @@
 | :--- | :--- |
 | `thiserror` | 用于创建专用错误类型的库，适用于需要精确错误信息的库代码。 |
 | `anyhow` | 基于 trait 对象的错误类型，简化应用程序中的错误处理，适用于不关心具体错误类型的场景。 |
-| `errno` | 提供跨平台访问 `errno` 变量的接口。 |
 
 ### 序列化与配置文件
 
@@ -41,6 +142,7 @@
 | `env_logger` | 通过环境变量配置的日志实现，必须与 `log` 一起使用。 |
 | `pretty_env_logger` | 基于 `env_logger`，提供漂亮的彩色日志输出。 |
 | `flexi_logger` | 一个灵活的日志记录器，支持写入文件、stderr 等多种输出，并可在运行时动态配置。 |
+| `simple-log` | 一个简单易用的日志库，提供基本的日志记录功能。 |
 
 ### 文件与目录
 
@@ -49,97 +151,84 @@
 | `include_dir` | 用于将整个目录树嵌入到二进制文件中的宏。 |
 | `tempfile` | 一个安全、跨平台的临时文件和目录创建库。 |
 | `zip` | 一个支持读写简单 ZIP 文件的 Rust 库。 |
+| `tar` | 一个用于处理 TAR 文件格式的 Rust 库。 |
 | `rust-embed` | 用于将 CSS、JS 和图片等静态资源嵌入到单个可执行文件中。 |
 
 ### 网络与Web
 
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
-| `url` | 一个基于 URL 标准的 URL 解析和处理库。 |
-| `http-types` | 提供共享的 HTTP 操作类型，具有高性能的流式接口。 |
-| `ipnet` | 用于处理 IPv4 和 IPv6 CIDR 地址的类型和函数。 |
-| `netdev` | 提供跨平台的网络接口 API。 |
-| `wol-rs` | (描述为空) |
-| `stunclient` | 一个简单的 STUN 客户端，用于解析 UDP 套接字的外部 IP 地址和端口。 |
-| `paho-mqtt` | Eclipse Paho MQTT 的 Rust 客户端库。 |
-
-### GUI与图形
-
-| 库 (Library) | 描述 (Description) |
-| :--- | :--- |
-| `Egui` | 一个简单、快速且高度便携的立即模式 GUI 库。 |
-| `qrcode-generator` | 用于生成 RAW、PNG 和 SVG 格式的二维码。 |
+| `lettre` | Rust 生态中一个功能强大、异步友好的邮件发送库。它允许你的 Rust 程序通过多种方式（最常见的是 SMTP）发送电子邮件。 |
+| `jsonwebtoken` | Rust 生态中一个非常流行且成熟的 JSON Web Token (JWT) 库。它允许你在 Rust 程序中方便地创建、验证和解析 JWT。 |
+| `qrcode-generator` | 在 RAW、PNG 和 SVG 格式中生成 QR 码矩阵和图像的 Rust 库。 |
+| `mime_guess` | 根据文件扩展名猜测 MIME 类型的库。 |
 
 ### 系统与平台
 
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
-| `os_info` | (描述为空) |
-| `num_cpus` | 用于获取机器上的 CPU 数量。 |
+| `os_info` | 用于获取操作系统信息的 Rust 库。 |
+| `num_cpus` | 用于获取机器上的 CPU 数量的库。 |
 | `sys-locale` | 一个轻量级库，用于获取系统或应用程序当前设置的区域设置。 |
 | `system_shutdown` | 提供跨平台的方式来执行关机、重启或注销操作。 |
 | `mac_address` | 提供跨平台的方法来获取网络硬件的 MAC 地址。 |
+| `bytes` | 一个处理字节的实用库。 |
 
-### Windows特定
-
-| 库 (Library) | 描述 (Description) |
-| :--- | :--- |
-| `winapi` | 提供对整个 Windows API 的原始 FFI 绑定。 |
-| `windows` | 允许调用任何 Windows API 的 crate，代码由元数据动态生成。 |
-| `winreg` | 提供对 MS Windows 注册表 API 的 Rust 绑定。 |
-| `windows-service` | 提供管理和实现 Windows 服务的工具。 |
-| `tauri-winrt-notification` | WinRT Toast API 的不完整包装器。 |
-
-### 音频处理
+### 数据库
 
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
-| `dasp` | 提供处理音频 PCM DSP 的基本功能。 |
-| `rubato` | 一个用于音频数据的异步重采样库。 |
-| `samplerate` | 基于 `libsamplerate` 的采样率转换库。 |
-| `fon` | Rust 音频类型、重采样、处理和混音库。 |
+| `sea-orm` | 一个关系型 ORM 框架，支持 MySQL、PostgreSQL、SQLite 等多种数据库。 |
+| `redis` | Redis 客户端库，支持异步操作和连接池。 |
 
 ### 并发与异步
 
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
 | `tokio` | 一个事件驱动的非阻塞 I/O 平台，用于编写异步应用程序。 |
-| `crossbeam-queue` | (描述为空) |
+| `crossbeam-queue` | 无锁队列实现，提供高性能的并发操作。 |
 | `ringbuf` | 无锁的单生产者单消费者 FIFO 环形缓冲区。 |
 
 ### 数据与编码
 
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
-| `regex` | (描述为空) |
-| `wildmatch` | (描述为空) |
+| `regex` | Rust 编程语言中一个非常流行的用于处理正则表达式的库。它提供了强大的正则表达式功能，允许开发人员在 Rust 中进行复杂的字符串匹配和操作。 |
+| `wildmatch` | 简单的通配符匹配库，支持类似 shell 的通配符模式。 |
 | `sha2` | 用纯 Rust 实现的 SHA-2 哈希函数家族。 |
-| `bytes` | 一个处理字节的实用库。 |
 | `hex` | 用于将数据编码为十六进制表示或从十六进制解码。 |
-| `cidr-utils` | 提供了处理 IPv4 CIDR 和 IPv6 CIDR 的函数。 |
 
 ### 开发与测试
 
 | 库 (Library) | 描述 (Description) |
 | :--- | :--- |
 | `mockall` | 一个强大的 Rust 模拟对象库，用于单元测试。 |
-| `rstest` | (描述为空) |
-| `once_cell` | (描述为空) |
-| `derive_builder` | (描述为空) |
-| `lazy_static` | (描述为空) |
-| `libloading` | 基于平台动态库加载功能的绑定，具有改进的内存安全性。 |
+| `once_cell` | 提供单次初始化的单元格类型，用于延迟初始化。 |
+| `derive_builder` | 通过派生宏自动生成构建器模式的代码。 |
 
-### 其他
+## 使用方法
 
-| 库 (Library) | 描述 (Description) |
-| :--- | :--- |
-| `chrono` | (描述为空) |
-| `winnow` | (描述为空) |
-| `handlebars` | (描述为空) |
-| `git2-rs` | (描述为空) |
-| `sqlx` | (描述为空) |
-| `flutter_rust_bridge` | Flutter/Dart 与 Rust 的绑定生成器。 |
-| `rdev` | 在 Windows、Linux 和 MacOS 上监听和发送键盘和鼠标事件。 |
-| `shutdown_hooks` | Rust 的关机钩子，是 `atexit` 的一个友好包装器。 |
-| `totp-rs` | 用于创建双因素认证令牌的库。 |
-| `shared_memory` | 一个用户友好的 crate，允许在进程之间共享内存。 |
+### 运行测试
+
+项目中的每个模块都包含了相应的测试用例，可以通过以下命令运行：
+
+```bash
+# 运行所有测试
+cargo test
+
+# 运行特定模块的测试
+cargo test database
+cargo test web::email
+```
+
+### 查看示例代码
+
+每个模块的源代码都包含了详细的使用示例和注释，可以直接查看对应的 `.rs` 文件来学习如何使用各个库。
+
+## 项目特点
+
+1. **全面性**: 涵盖了 Rust 生态系统中的主要库和工具
+2. **实用性**: 每个模块都包含实际可运行的代码示例
+3. **结构化**: 清晰的模块划分，便于学习和参考
+4. **文档完善**: 详细的代码注释和使用说明
+5. **异步支持**: 大部分示例都支持异步编程模式
