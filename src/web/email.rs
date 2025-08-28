@@ -23,9 +23,9 @@ mod email_test {
     async fn test_async_email() {
         // 构建邮件消息
         let message = Message::builder()
-            .from("1220531071@qq.com".parse().unwrap()) // 设置发件人
-            .reply_to("1220531071@qq.com".parse().unwrap()) // 设置收件人回复的地址
-            .to("zhou_jia_ning@163.com".parse().unwrap()) // 设置收件人
+            .from("sender@qq.com".parse().unwrap()) // 设置发件人
+            .reply_to("sender@qq.com".parse().unwrap()) // 设置收件人回复的地址
+            .to("receiver@163.com".parse().unwrap()) // 设置收件人
             .subject("Rust异步普通文本测试邮件") // 设置邮件主题
             .header(header::ContentType::TEXT_PLAIN) // 设置邮件内容类型为文本
             .body("这是一封使用异步方式发送的Rust测试邮件，来自tokio1运行时。".to_string())
@@ -33,8 +33,8 @@ mod email_test {
 
         // 配置SMTP认证凭据
         let credentials = Credentials::new(
-            "1220531071@qq.com".to_string(),
-            "ulfymcwntccvhabd".to_string(),
+            "sender@qq.com".to_string(),
+            "123123123".to_string(),
         );
 
         // 创建异步SMTP传输器
@@ -63,17 +63,17 @@ mod email_test {
     #[tokio::test]
     async fn send_html_email() {
         let message = Message::builder()
-            .from("1220531071@qq.com".parse().unwrap()) // 设置发件人
-            .reply_to("1220531071@qq.com".parse().unwrap()) // 设置收件人回复的地址
-            .to("zhou_jia_ning@163.com".parse().unwrap()) // 设置收件人
+            .from("sender@qq.com".parse().unwrap()) // 设置发件人
+            .reply_to("sender@qq.com".parse().unwrap()) // 设置收件人回复的地址
+            .to("receiver@163.com".parse().unwrap()) // 设置收件人
             .subject("Rust异步HTML测试邮件") // 设置邮件主题
             .header(header::ContentType::TEXT_HTML) // 设置邮件内容类型为HTML
             .body("<h1>这是一封HTML邮件</h1>".to_string())
             .unwrap(); // 设置邮件内容
 
         let credentials = Credentials::new(
-            "1220531071@qq.com".to_string(),
-            "ulfymcwntccvhabd".to_string(),
+            "sender@qq.com".to_string(),
+            "123123123".to_string(),
         );
 
         let smtp_transport = AsyncSmtpTransport::<Tokio1Executor>::starttls_relay("smtp.qq.com")
@@ -101,9 +101,9 @@ mod email_test {
     async fn send_email_with_attachment() {
         let file_content = tokio::fs::read_to_string("src/web/jwt.rs").await.unwrap();
         let message = Message::builder()
-            .from("1220531071@qq.com".parse().unwrap()) // 设置发件人
-            .reply_to("1220531071@qq.com".parse().unwrap()) // 设置收件人回复的地址
-            .to("zhou_jia_ning@163.com".parse().unwrap()) // 设置收件人
+            .from("sender@qq.com".parse().unwrap()) // 设置发件人
+            .reply_to("sender@qq.com".parse().unwrap()) // 设置收件人回复的地址
+            .to("receiver@163.com".parse().unwrap()) // 设置收件人
             .subject("Rust 异步附件测试邮件")
             .multipart(
                 MultiPart::mixed()
@@ -120,8 +120,8 @@ mod email_test {
             .unwrap();
 
         let credentials = Credentials::new(
-            "1220531071@qq.com".to_string(),
-            "ulfymcwntccvhabd".to_string(),
+            "sender@qq.com".to_string(),
+            "123123123".to_string(),
         );
 
         let smtp_transport = AsyncSmtpTransport::<Tokio1Executor>::starttls_relay("smtp.qq.com")
