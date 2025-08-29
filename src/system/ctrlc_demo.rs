@@ -6,7 +6,6 @@
 
 #[cfg(test)]
 mod ctrlc_demo_test {
-    use std::os::unix::process;
     use std::sync::Arc;
     use std::sync::atomic::AtomicBool;
     use std::time::Duration;
