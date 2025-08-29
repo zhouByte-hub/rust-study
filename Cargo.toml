@@ -49,6 +49,7 @@ sys-locale = "0.3.2"
 system_shutdown = "4.0.1"
 mac_address = "1.1.8"
 bytes = "1.10.1"
+ctrlc = "3.4.7"
 
 # web
 qrcode-generator = "5.0.0"
