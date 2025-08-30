@@ -32,10 +32,7 @@ mod email_test {
             .unwrap(); // 设置邮件内容
 
         // 配置SMTP认证凭据
-        let credentials = Credentials::new(
-            "sender@qq.com".to_string(),
-            "123123123".to_string(),
-        );
+        let credentials = Credentials::new("sender@qq.com".to_string(), "123123123".to_string());
 
         // 创建异步SMTP传输器
         let smtp_transport = AsyncSmtpTransport::<Tokio1Executor>::starttls_relay("smtp.qq.com")
@@ -71,10 +68,7 @@ mod email_test {
             .body("<h1>这是一封HTML邮件</h1>".to_string())
             .unwrap(); // 设置邮件内容
 
-        let credentials = Credentials::new(
-            "sender@qq.com".to_string(),
-            "123123123".to_string(),
-        );
+        let credentials = Credentials::new("sender@qq.com".to_string(), "123123123".to_string());
 
         let smtp_transport = AsyncSmtpTransport::<Tokio1Executor>::starttls_relay("smtp.qq.com")
             .unwrap()
@@ -119,10 +113,7 @@ mod email_test {
             )
             .unwrap();
 
-        let credentials = Credentials::new(
-            "sender@qq.com".to_string(),
-            "123123123".to_string(),
-        );
+        let credentials = Credentials::new("sender@qq.com".to_string(), "123123123".to_string());
 
         let smtp_transport = AsyncSmtpTransport::<Tokio1Executor>::starttls_relay("smtp.qq.com")
             .unwrap()

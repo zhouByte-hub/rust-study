@@ -1,6 +1,6 @@
 /**
  * ctrlc = "3.4.7"
- * 
+ *
  * 用于在 Rust 程序中处理操作系统的信号（Signals），最常见的是处理用户按下 Ctrl+C 组合键（在 Unix/Linux/macOS 上对应 SIGINT 信号，在 Windows 上也有相应的中断处理）时的事件。
  */
 
@@ -8,8 +8,8 @@
 mod ctrlc_demo_test {
     use std::sync::Arc;
     use std::sync::atomic::AtomicBool;
-    use std::time::Duration;
     use std::sync::atomic::Ordering;
+    use std::time::Duration;
 
     #[test]
     fn test() {
@@ -27,7 +27,8 @@ mod ctrlc_demo_test {
              * AcqRel：获取释放顺序，结合了 Acquire 和 Release 的语义。
              */
             running_clone.store(false, Ordering::SeqCst);
-        }).unwrap();
+        })
+        .unwrap();
 
         println!("设置中断处理程序成功");
 

@@ -5,3 +5,4 @@ pub mod once;
 pub mod regex_demo;
 pub mod sha;
 pub mod wild;
+pub mod winnow_demo;
