@@ -35,7 +35,11 @@ mod winnow_demo_test {
 
     #[test]
     fn literal_test() {
-        // literal 函数用于识别输入流中的特定字面量。它可以精确匹配指定的标记序列。
+        /*
+           literal 它会从输入的当前位置开始，一个字符一个字符地比对，看你给它的那个字符串是不是真的在那里。
+           如果一模一样，就成功，把这段字符串“吃掉”（消耗掉）
+           如果不一样，就失败，啥也不动
+        */
         let mut input = "hello world";
         let result = literal::<Caseless<&str>, &str, InputError<&str>>(Caseless("hello"))
             .parse_next(&mut input)
@@ -74,7 +78,7 @@ mod winnow_demo_test {
 
     #[test]
     fn rest_test() {
-        // rest 函数用于匹配输入流中的所有剩余字符。
+        // rest 返回输入流中从当前位置开始的“所有剩余内容”，然后消耗掉它。
         let mut input = "hello world";
         let result = rest::<&str, InputError<&str>>
             .parse_next(&mut input)
@@ -106,7 +110,7 @@ mod winnow_demo_test {
 
     #[test]
     fn take_till_test() {
-        // take_till 函数用于匹配输入流中的直到指定字符的所有字符。
+        // take_till 从输入流的当前位置开始，持续“取出”并消耗所有字符，直到遇到第一个满足你指定条件的字符为止。
         let mut input = "hello world";
 
         let result = take_till::<_, &str, InputError<&str>>(0.., |item| item == ' ')
@@ -118,7 +122,7 @@ mod winnow_demo_test {
 
     #[test]
     fn take_unitl_test() {
-        // take_until 函数用于识别输入流中直到第一次出现指定字面量为止的输入切片。它会持续消耗标记，直到找到指定的字面量。
+        // take_until 从输入的当前位置开始，持续“取出”字符，不管它们是什么，直到遇到第一个满足你指定条件的字符为止。
         let mut input = "hello world";
 
         // 0..是一个 范围（Range）表达式，它表示从 0 到无穷大的范围。
@@ -131,13 +135,16 @@ mod winnow_demo_test {
 
     #[test]
     fn take_while_test() {
-        // take_while 函数用于匹配输入流中的直到指定字符的所有字符。
+        /* take_while的作用：
+           从输入的当前位置开始，一个字符一个字符地检查，如果这个字符满足你指定的条件，就“拿走”它（消耗输入）；继续看下一个。
+           一旦遇到一个字符不满足条件，就立刻停止，把所有“拿走”的字符打包返回
+        */
         let mut input = "hello world";
 
         let result = take_while::<_, &str, InputError<&str>>(0.., |item| item == ' ')
             .parse_next(&mut input)
             .unwrap();
-        println!("匹配的字符: {}", result);
-        println!("剩余输入: {}", input);
+        println!("匹配的字符: {}", result); // ''
+        println!("剩余输入: {}", input); // 'hello world'
     }
 }
