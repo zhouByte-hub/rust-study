@@ -1,0 +1,7 @@
+impl MyStruct {
+    pub fn new() -> Self {
+        let mut hash = HashMap::new();
+        hash.insert("name", "zhangsan");
+        Self { field: 0 }
+    }
+}
