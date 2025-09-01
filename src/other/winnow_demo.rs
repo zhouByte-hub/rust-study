@@ -13,7 +13,7 @@
  * winnow提供的所有函数都是从头开始匹配，如果没有匹配成功就会报错。
  */
 #[cfg(test)]
-mod winnow_demo_test {
+mod winnow_token_test {
 
     use winnow::ascii::Caseless;
     use winnow::error::InputError;
@@ -148,3 +148,183 @@ mod winnow_demo_test {
         println!("剩余输入: {}", input); // 'hello world'
     }
 }
+
+#[cfg(test)]
+mod winnow_combinator_test {
+    use winnow::Result;
+    use winnow::combinator::{alt, opt, repeat, separated, seq};
+    use winnow::error::ContextError;
+    use winnow::prelude::*;
+    use winnow::token::{any, literal, take_while};
+
+    #[derive(Debug, Eq, PartialEq)]
+    pub(crate) struct Color {
+        pub(crate) red: u8,
+        pub(crate) green: u8,
+        pub(crate) blue: u8,
+    }
+
+    /**
+     * 按顺序应用多个解析器，并将结果组合成一个结构体或元组。
+     */
+    #[test]
+    pub fn seq_test() {
+        let mut input = "#a1b2c3";
+        // 一定要声明出错误类型：winnow::error::ContextError
+        let result: Result<Color, ContextError> = seq!(Color {
+            _: '#',
+            red: hex_primary,
+            green: hex_primary,
+            blue: hex_primary
+        })
+        .parse_next(&mut input);
+        match result {
+            Ok(color) => {
+                println!("{:?}", color);
+            }
+            Err(err) => {
+                println!("{:?}", err);
+            }
+        }
+    }
+
+    fn hex_primary(input: &mut &str) -> Result<u8> {
+        take_while(2, |c: char| c.is_ascii_hexdigit())
+            .try_map(|input| u8::from_str_radix(input, 16))
+            .parse_next(input)
+    }
+
+    /**
+     * 尝试按顺序应用多个解析器，返回第一个成功的解析器的结果。
+     */
+    #[test]
+    fn alt_test() {
+        let mut input = "hello world";
+        let result: Result<&str, ContextError> =
+            alt((literal("hello"), literal("world"))).parse_next(&mut input);
+        match result {
+            Ok(str) => {
+                println!("{}", str);
+            }
+            Err(err) => {
+                println!("{:?}", err);
+            }
+        }
+        println!("剩余输入: {}", input);
+    }
+
+    /**
+     * 使解析器可选，即使解析失败也返回成功（结果为 None）。
+     */
+    #[test]
+    fn opt_test() {
+        let mut input = "hello world";
+        let result: Result<Option<&'static str>, ContextError> =
+            opt(literal("abc")).parse_next(&mut input);
+        match result {
+            Ok(Some(str)) => {
+                println!("{}", str);
+            }
+            Ok(None) => {
+                println!("None");
+            }
+            Err(err) => {
+                println!("{:?}", err);
+            }
+        }
+    }
+
+    /**
+     * 重复应用解析器，返回所有成功的结果，之间用指定的分隔符隔开。
+     */
+    #[test]
+    fn separated_test() {
+        let mut input = "hello,hello,hello";
+        let result: Result<Vec<&'static str>, ContextError> =
+            separated(0.., literal("hello"), ",").parse_next(&mut input);
+        match result {
+            Ok(vec) => {
+                for item in vec {
+                    println!("{}", item);
+                }
+            }
+            Err(err) => println!("{:?}", err),
+        }
+    }
+
+    /**
+     * 重复应用解析器，返回所有成功的结果。
+     */
+    #[test]
+    fn repeat_test() {
+        let mut input = "abcabcabc";
+        let result: Result<Vec<&str>, ContextError> =
+            repeat(0.., literal("abc")).parse_next(&mut input);
+        match result {
+            Ok(vec) => {
+                for item in vec {
+                    println!("{}", item);
+                }
+            }
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input);
+    }
+
+    /**
+     * 将解析器的结果应用一个函数进行转换。
+     */
+    #[test]
+    fn map_test() {
+        let mut input = "123123";
+        let result: Result<usize, ContextError> = take_while(0.., |c: char| c.is_ascii_digit())
+            .map(|s: &'static str| s.len())
+            .parse_next(&mut input);
+        match result {
+            Ok(len) => {
+                println!("{}", len);
+            }
+            Err(err) => {
+                println!("{:?}", err);
+            }
+        }
+    }
+
+    /**
+     * 尝试将解析器的结果应用一个函数进行转换，如果转换失败则返回错误。
+     */
+    #[test]
+    fn try_map_test(){
+        let mut input = "123123";
+
+        let result: Result<u8, ContextError> = any.try_map(|item: char| {
+            // 将字符转换为字符串切片，然后解析为 u8
+            item.to_string().parse::<u8>()
+        }).parse_next(&mut input);
+
+        match result {
+            Ok(num) => {
+                println!("{}", num);
+            }
+            Err(err) => {
+                println!("{:?}", err);
+            }
+        }
+    }
+
+    /**
+     * 验证解析器的结果是否满足条件，如果不满足则返回错误。
+     */
+    #[test]
+    fn verify_test(){
+        let mut input = "123123";
+        let result: Result<char, ContextError> = any.verify(|c: &char| c.is_ascii_digit()).parse_next(&mut input);
+        match result {
+            Ok(c) => println!("{}", c),
+            Err(err) => println!("{:?}", err),
+        }
+    }
+}
+
+#[cfg(test)]
+mod winnow_ascii_test {}
