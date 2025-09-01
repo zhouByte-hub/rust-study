@@ -294,13 +294,15 @@ mod winnow_combinator_test {
      * 尝试将解析器的结果应用一个函数进行转换，如果转换失败则返回错误。
      */
     #[test]
-    fn try_map_test(){
+    fn try_map_test() {
         let mut input = "123123";
 
-        let result: Result<u8, ContextError> = any.try_map(|item: char| {
-            // 将字符转换为字符串切片，然后解析为 u8
-            item.to_string().parse::<u8>()
-        }).parse_next(&mut input);
+        let result: Result<u8, ContextError> = any
+            .try_map(|item: char| {
+                // 将字符转换为字符串切片，然后解析为 u8
+                item.to_string().parse::<u8>()
+            })
+            .parse_next(&mut input);
 
         match result {
             Ok(num) => {
@@ -316,9 +318,11 @@ mod winnow_combinator_test {
      * 验证解析器的结果是否满足条件，如果不满足则返回错误。
      */
     #[test]
-    fn verify_test(){
+    fn verify_test() {
         let mut input = "123123";
-        let result: Result<char, ContextError> = any.verify(|c: &char| c.is_ascii_digit()).parse_next(&mut input);
+        let result: Result<char, ContextError> = any
+            .verify(|c: &char| c.is_ascii_digit())
+            .parse_next(&mut input);
         match result {
             Ok(c) => println!("{}", c),
             Err(err) => println!("{:?}", err),
@@ -327,4 +331,63 @@ mod winnow_combinator_test {
 }
 
 #[cfg(test)]
-mod winnow_ascii_test {}
+mod winnow_ascii_test {
+    use winnow::error::ContextError;
+    use winnow::{
+        Parser,
+        ascii::{alpha1, digit1, space0},
+    };
+
+    /**
+     * 解析一个或多个 ASCII 数字字符。
+     */
+    #[test]
+    fn digit1_test() {
+        let mut input = "123abc";
+        /*
+           digit0：匹配 0 个到多个数字字符
+           digit1: 匹配一个到多个数字字符
+        */
+        let result: Result<&str, ContextError> = digit1.parse_next(&mut input);
+        match result {
+            Ok(c) => println!("{}", c),
+            Err(err) => println!("{:?}", err),
+        }
+    }
+
+    /**
+     * 解析一个或多个 ASCII 字母字符。
+     */
+    #[test]
+    fn alpha1_test() {
+        let mut input = "abc123";
+        /*
+           alpha0：匹配 0 个到多个字母字符
+           alpha1: 匹配一个到多个字母字符
+        */
+        let result: Result<&str, ContextError> = alpha1.parse_next(&mut input);
+        match result {
+            Ok(c) => println!("{}", c),
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input);
+    }
+
+    /**
+     * 解析 0 个或多个空格字符。
+     */
+    #[test]
+    fn space0_test() {
+        let mut input = "   abc";
+        /*
+           space0：匹配 0 个到多个空格字符
+           space1: 匹配一个到多个空格字符
+        */
+        let result: Result<&str, ContextError> = space0.parse_next(&mut input);
+        match result {
+            Ok(c) => println!("{}", c),
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input);
+    }
+}
