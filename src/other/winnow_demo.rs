@@ -504,6 +504,40 @@ mod winnow_combinator_test {
     }
 }
 
+
+
+
+
+
+/**
+ * winnow::ascii 模块函数列表：
+ * alpha0：识别零个或多个小写和大写ASCII字母字符：'a'..='z', 'A'..='Z'
+ * alpha1：识别一个或多个小写和大写ASCII字母字符：'a'..='z', 'A'..='Z'
+ * alphanumeric0：识别零个或多个ASCII数字和字母字符：'a'..='z', 'A'..='Z', '0'..='9'
+ * alphanumeric1：识别一个或多个ASCII数字和字母字符：'a'..='z', 'A'..='Z', '0'..='9'
+ * crlf：识别字符串 "\r\n"
+ * dec_int：解码十进制有符号整数（例如 i32）
+ * dec_uint：解码十进制无符号整数（例如 u32）
+ * digit0：识别零个或多个ASCII数字字符：'0'..='9'
+ * digit1：识别一个或多个ASCII数字字符：'0'..='9'
+ * escaped：解析转义字符，并取消转义
+ * escaped_transform：已弃用，被 escaped 替代
+ * float：识别文本格式的浮点数并返回 f32 或 f64
+ * hex_digit0：识别零个或多个ASCII十六进制数字字符：'0'..='9', 'A'..='F', 'a'..='f'
+ * hex_digit1：识别一个或多个ASCII十六进制数字字符：'0'..='9', 'A'..='F', 'a'..='f'
+ * hex_uint：解码可变宽度的十六进制整数（例如 u32）
+ * line_ending：识别行结束（包括 "\n" 和 "\r\n"）
+ * multispace0：识别零个或多个空格、制表符、回车和换行符
+ * multispace1：识别一个或多个空格、制表符、回车和换行符
+ * newline：匹配换行符 '\n'
+ * oct_digit0：识别零个或多个八进制字符：'0'..='7'
+ * oct_digit1：识别一个或多个八进制字符：'0'..='7'
+ * space0：识别零个或多个空格和制表符
+ * space1：识别一个或多个空格和制表符
+ * tab：匹配制表符 '\t'
+ * take_escaped：识别带有转义字符的输入片段
+ * till_line_ending：识别直到 "\r\n"、"\n" 或文件结束的 0+ 个字符的字符串
+ */
 #[cfg(test)]
 mod winnow_ascii_test {
     use winnow::error::ContextError;
