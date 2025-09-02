@@ -151,8 +151,14 @@ mod winnow_token_test {
 
 #[cfg(test)]
 mod winnow_combinator_test {
+    use std::collections::HashMap;
+
     use winnow::Result;
-    use winnow::combinator::{alt, opt, repeat, separated, seq};
+    use winnow::ascii::{alpha0, alpha1, digit0, digit1};
+    use winnow::combinator::{
+        alt, cond, delimited, fill, iterator, not, opt, peek, permutation, preceded, repeat,
+        repeat_till, separated, seq, terminated,
+    };
     use winnow::error::ContextError;
     use winnow::prelude::*;
     use winnow::token::{any, literal, take_while};
@@ -214,7 +220,7 @@ mod winnow_combinator_test {
     }
 
     /**
-     * 使解析器可选，即使解析失败也返回成功（结果为 None）。
+     * 使解析器可选，即使解析失败也不会报错，返回 None。
      */
     #[test]
     fn opt_test() {
@@ -265,6 +271,27 @@ mod winnow_combinator_test {
                 for item in vec {
                     println!("{}", item);
                 }
+            }
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input);
+    }
+
+    /**
+     * 重复应用解析器，直到遇到指定的分隔符，返回所有成功的结果。
+     */
+    #[test]
+    fn repeat_till_test() {
+        let mut input = "abcabcabcend";
+        let result: Result<(Vec<&str>, &str), ContextError> =
+            repeat_till(1.., literal("abc"), literal("end")).parse_next(&mut input);
+        match result {
+            // vec是结果，str 是停止符
+            Ok((vec, str)) => {
+                for item in vec {
+                    println!("{}", item);
+                }
+                println!("{}", str);
             }
             Err(err) => println!("{:?}", err),
         }
@@ -327,6 +354,153 @@ mod winnow_combinator_test {
             Ok(c) => println!("{}", c),
             Err(err) => println!("{:?}", err),
         }
+    }
+
+    /**
+     * 按顺序应用多个解析器，返回所有成功的结果。
+     * 如果所有子解析器都成功，Permutation 将会成功。它以解析器元组为参数，并返回解析器结果的元组。
+     */
+    #[test]
+    fn permutation_test() {
+        let mut input = "123abc";
+        let result: Result<(&str, &str), ContextError> =
+            permutation((digit0, alpha0)).parse_next(&mut input);
+        match result {
+            Ok((digit, alpha)) => {
+                println!("{}", digit);
+                println!("{}", alpha);
+            }
+            Err(err) => println!("{:?}", err),
+        }
+    }
+
+    /**
+     * 条件解析器，根据条件是否满足来选择不同的解析器。
+     */
+    #[test]
+    fn condition_test() {
+        let mut input = "123abc";
+        let result: Result<Option<&str>, ContextError> =
+            cond(!input.is_empty(), digit0).parse_next(&mut input);
+        match result {
+            Ok(Some(digit)) => {
+                println!("{:?}", digit);
+            }
+            Ok(None) => {
+                println!("None");
+            }
+            Err(err) => println!("{:?}", err),
+        }
+    }
+
+    /**
+     * 解析器的结果必须被包裹在指定的分隔符之间。
+     */
+    #[test]
+    fn delimited_test() {
+        let mut input = "123abc";
+        let result: Result<&str, ContextError> =
+            delimited("12", digit0, "abc").parse_next(&mut input);
+        match result {
+            Ok(digit) => {
+                println!("{:?}", digit);
+            }
+            Err(err) => println!("{:?}", err),
+        }
+    }
+
+    /**
+     * 填充解析器的结果到一个固定大小的数组中。
+     */
+    #[test]
+    fn fill_test() {
+        let mut input = "123_abc";
+        let mut buf = [""; 5];
+        let result: Result<(), ContextError> = fill(digit0, &mut buf).parse_next(&mut input);
+        match result {
+            Ok(()) => {
+                println!("{:?}", buf);
+            }
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input); // _abc
+    }
+
+    /**
+     * 解析一个模式，然后解析另一个模式，只返回第一个模式的结果
+     */
+    #[test]
+    fn terminated_test() {
+        let mut input = "123_abc";
+        let result: Result<&str, ContextError> =
+            terminated(digit0, literal("_")).parse_next(&mut input);
+        match result {
+            Ok(digit) => {
+                println!("{:?}", digit);
+            }
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input); // abc
+    }
+
+    /**
+     * 重复执行内嵌解析器，惰性返回结果
+     * 如果成功，调用迭代器的 ParserIterator::finish 方法获取剩余输入；如果遇到错误，则返回错误值。
+     */
+    #[test]
+    fn iterator_test() {
+        let input = "123|234|345|456";
+        let mut iter = iterator(input, terminated(digit1, "|"));
+
+        let parsed = iter.map(|v| (v, v.len())).collect::<HashMap<_, _>>();
+        let _: ModalResult<_> = iter.finish();
+
+        parsed.iter().for_each(|(key, value)| {
+            println!("{}-{}", key, value);
+        });
+    }
+
+    /**
+     * 如果子解析器返回错误，则成功。
+     * 这不会前进 Stream
+     */
+    #[test]
+    fn not_test() {
+        let mut input = "abc";
+        let result: Result<(), ContextError> = not(digit1).parse_next(&mut input);
+        match result {
+            Ok(()) => println!("成功"),
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input);
+    }
+
+    /**
+     * 查看解析器的结果，不消耗输入。
+     */
+    #[test]
+    fn peek_test() {
+        let mut input = "abcdef";
+        let result: Result<&str, ContextError> = peek(alpha1).parse_next(&mut input);
+        match result {
+            Ok(c) => println!("{}", c),
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input);
+    }
+
+    /**
+     * 顺序组合两个解析器，仅返回第二个解析器的输出。
+     */
+    #[test]
+    fn preceded_test() {
+        let mut input = "123abc";
+        let result: Result<&str, ContextError> = preceded(digit1, alpha1).parse_next(&mut input);
+        match result {
+            Ok(c) => println!("{}", c),
+            Err(err) => println!("{:?}", err),
+        }
+        println!("剩余输入: {}", input);
     }
 }
 
