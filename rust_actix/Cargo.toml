@@ -5,11 +5,16 @@ edition = "2024"
 
 [dependencies]
 actix-web = "4.11.0"
+actix-web-lab = "0.24.3"
 serde = {version="1.0", features = ["derive"]}
 serde_json = "1.0.142"
 futures-util = "0.3.31"
 actix-ws = "0.3.0"
 mime_guess = "2.0.5"
+
+## SSE 
+tokio = {version="1.47.1", features = ["full"]}
+tokio-stream = {version = "0.1.17", features = ["sync"] }
 
 [target.'cfg(target_os = "macos")'.dependencies]    ## windows、macos、linux、unix
 rust-embed = {version = "8.7.2", features = ["include-exclude"]}

@@ -8,10 +8,13 @@
 #[cfg(test)]
 mod meilisearch_test {
     use crate::search::meili_search::movie::Movie;
+    use meilisearch_sdk::settings::Embedder;
+    use meilisearch_sdk::settings::EmbedderSource;
     use meilisearch_sdk::{
         client::{Client, SwapIndexes},
         search::{SearchResults, Selectors},
     };
+    use std::collections::HashMap;
 
     /**
      * 新增索引并添加文档
@@ -67,7 +70,7 @@ mod meilisearch_test {
             .with_offset(0)
             .with_highlight_post_tag("</mark>")
             .with_highlight_pre_tag("<mark>")
-            .with_attributes_to_highlight(Selectors::Some(&["overview"]))
+            .with_attributes_to_highlight(Selectors::Some(&["*"]))
             .execute()
             .await?;
 
@@ -166,6 +169,44 @@ mod meilisearch_test {
         let task = client.swap_indexes([&swap_indexes]).await?;
         let task_status = client.get_task(task).await?;
         println!("{:?}", task_status);
+        Ok(())
+    }
+
+    /**
+     * 设置 OpenAI
+     */
+    #[tokio::test]
+    async fn embading_test() -> Result<(), Box<dyn std::error::Error>> {
+        let client = Client::new("http://43.139.97.119:7700", Some("meilisearch-day"))?;
+        let embedders = HashMap::from([(
+            String::from("test_embedding"),
+            Embedder {
+                source: EmbedderSource::OpenAi,
+                url: Some("https://ai.nengyongai.cn/v1".to_string()),
+                api_key: Some("sk-".to_string()),
+                model: Some("text-embedding-3-small".to_string()),
+                document_template: Some("{{doc.title}}".to_string()),
+                dimensions: Some(1536),
+                ..Embedder::default()
+            },
+        )]);
+        let embading = client.index("movies").set_embedders(&embedders).await?;
+        let task_status = client.get_task(embading).await?;
+        println!("{:?}", task_status);
+        Ok(())
+    }
+
+    /**
+     * 列出所有索引
+     */
+    #[tokio::test]
+    async fn indexes_test() -> Result<(), Box<dyn std::error::Error>> {
+        let client = Client::new("http://43.139.97.119:7700", Some("meilisearch-day"))?;
+        let indexes = client.get_indexes().await?;
+        for index in indexes.results {
+            println!("{:?}", index);
+            println!("=========")
+        }
         Ok(())
     }
 }

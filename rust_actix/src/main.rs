@@ -8,7 +8,9 @@ use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
  */
 pub mod controller;
 pub mod form_request;
+pub mod sse;
 use crate::controller::{basic, json};
+use crate::sse::sender::SseSender;
 use rust_embed::RustEmbed;
 
 /**
@@ -55,12 +57,14 @@ async fn main() {
             .app_data(AppState {
                 app_name: String::from("rust_actix"),
             })
+            .app_data(web::Data::new(SseSender::new()))
             .configure(basic::basic_path_config)
             .configure(json::json_path_config)
             .configure(form_request::path::path_config_service)
             .configure(form_request::json::json_config_service)
             .configure(form_request::form::form_config_service)
             .configure(form_request::query::query_config_service)
+            .route("/sse", web::get().to(sse::sse_endpoint::sse_stream))
             .route("/front/{path:.*}", web::get().to(handle_web_request))
     })
     .workers(10)
