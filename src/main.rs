@@ -3,6 +3,7 @@ pub mod error;
 pub mod file;
 pub mod logs;
 pub mod other;
+pub mod search;
 pub mod serialize;
 pub mod shell;
 pub mod system;
