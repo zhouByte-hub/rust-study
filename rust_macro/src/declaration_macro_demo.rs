@@ -2,9 +2,9 @@
  * 宏（Macros）是一种强大的元编程工具，可以用来生成代码、减少重复以及实现复杂的编译时逻辑。Rust中的宏主要分为两种类型：
  *      1、声明宏：也称为macro_rules!宏，用于定义简单的代码生成规则。
  *      2、过程宏：用于定义更复杂的代码生成规则，过程宏可以在编译时对代码进行操作。
- * 
+ *
  * 宏是在编译时展开的，它们生成代码并插入到调用宏的位置。
- * 
+ *
  * 宏可以接受多种类型的参数，称为“指示符”：
  *      1、block：代码块，用于多个语句组成的代码块。
  *      2、expr：表达式，可以是任何合法的Rust表达式。
@@ -35,14 +35,14 @@ mod block_test {
     }
 
     #[test]
-    fn test_1(){
+    fn test_1() {
         /* 展开为
-            {
-                let a = 1;
-                let b = 2;
-                println!("{}", a + b);
-            }
-         */
+           {
+               let a = 1;
+               let b = 2;
+               println!("{}", a + b);
+           }
+        */
         example!({
             let a = 1;
             let b = 2;
@@ -52,7 +52,7 @@ mod block_test {
 }
 
 #[cfg(test)]
-mod expr_test{
+mod expr_test {
 
     // 表达式
     macro_rules! example {
@@ -63,16 +63,16 @@ mod expr_test{
     }
 
     #[test]
-    fn test(){
+    fn test() {
         /*  展开为
-            println!("{}", 1 + 2);
-         */
+           println!("{}", 1 + 2);
+        */
         example!(1 + 2);
     }
 }
 
 #[cfg(test)]
-mod ident_test{
+mod ident_test {
 
     // 标识符，用于变量名、函数名、类型名等。
     macro_rules! example {
@@ -82,17 +82,17 @@ mod ident_test{
     }
 
     #[test]
-    fn test(){
+    fn test() {
         /*  展开为
-            let a = 10;
-         */
+           let a = 10;
+        */
         example!(a);
         println!("{}", a);
     }
 }
 
 #[cfg(test)]
-mod ty_test{
+mod ty_test {
 
     // 类型，用于指定类型名称。
     macro_rules! example {
@@ -103,17 +103,17 @@ mod ty_test{
     }
 
     #[test]
-    fn test(){
+    fn test() {
         /* 展开为
-            let a: i32 = 10;
-            println!("{}", a);
-         */
+           let a: i32 = 10;
+           println!("{}", a);
+        */
         example!(i32);
     }
 }
 
 #[cfg(test)]
-mod pat_test{
+mod pat_test {
 
     // 用于模式匹配。
     macro_rules! example {
@@ -126,20 +126,19 @@ mod pat_test{
     }
 
     #[test]
-    fn test(){
+    fn test() {
         /*  展开为
-            match 10 {
-                10 => println!("10"),
-                _ => println!("other"),
-            }
-         */
+           match 10 {
+               10 => println!("10"),
+               _ => println!("other"),
+           }
+        */
         example!(10, 10);
     }
 }
 
-
 #[cfg(test)]
-mod stmt_test{
+mod stmt_test {
 
     // 语句，用于执行单一语句。
     macro_rules! example {
@@ -154,9 +153,8 @@ mod stmt_test{
     }
 }
 
-
 #[cfg(test)]
-mod item_test{
+mod item_test {
 
     // 项，用于函数、结构体、模块等项。
     macro_rules! example {
@@ -166,47 +164,52 @@ mod item_test{
     }
 
     #[test]
-    fn test(){
+    fn test() {
         /*  展开为
+           fn temp() {
+               println!("hello world");
+           }
+        */
+        example!(
             fn temp() {
                 println!("hello world");
             }
-         */
-        example!(fn temp() {
-            println!("hello world");
-        });
+        );
         temp();
     }
 }
 
 #[cfg(test)]
-mod meta_test{
+mod meta_test {
 
     // 元数据项，用于属性：结构体属性、注解等元信息
     macro_rules! example {
         ($i: item, $m: meta) => {
-            #[$m]
+            // #[$m]
             $i
         };
     }
 
     #[test]
-    fn test(){
+    fn test() {
         /* 展开为
-            #[test]
+           #[test]
+           fn temp() {
+               println!("hello world");
+           }
+        */
+        example!(
             fn temp() {
                 println!("hello world");
-            }
-         */
-        example!(fn temp() {
-            println!("hello world");
-        }, test);
+            },
+            test
+        );
         temp();
     }
 }
 
 #[cfg(test)]
-mod path_test{
+mod path_test {
 
     // 路径，用于路径（例如模块路径）
     macro_rules! example {
@@ -216,17 +219,16 @@ mod path_test{
     }
 
     #[test]
-    fn test(){
+    fn test() {
         /* 展开为
-            println!("std::fmt::Error");
-         */
+           println!("std::fmt::Error");
+        */
         example!(std::fmt::Error);
     }
 }
 
-
 #[cfg(test)]
-mod literal_test{
+mod literal_test {
 
     // 字面量，用于常量值（字符串、数字等）。
     macro_rules! example {
@@ -237,17 +239,17 @@ mod literal_test{
     }
 
     #[test]
-    fn test(){
+    fn test() {
         /*  展开为
-            let x = "hello world";
-            println!("{}", x);
-         */
+           let x = "hello world";
+           println!("{}", x);
+        */
         example!("hello world");
     }
 }
 
 #[cfg(test)]
-mod vis_test{
+mod vis_test {
 
     // 可见性描述符
     macro_rules! example {

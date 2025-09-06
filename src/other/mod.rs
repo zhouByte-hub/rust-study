@@ -1,10 +1,10 @@
 pub mod builder_demo;
 pub mod hex_demo;
 pub mod mack;
+pub mod macro_test;
 pub mod once;
 pub mod regex_demo;
 pub mod sha;
 pub mod wild;
 pub mod winnow_demo;
 pub mod winnow_rust_demo;
-pub mod declaration_macro_demo;

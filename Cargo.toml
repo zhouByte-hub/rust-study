@@ -84,6 +84,7 @@ winnow = "0.7.13"
 [dev-dependencies]
 mockall = "0.13.1"
 httpmock = "0.7.0"
+rust_macro = {path = "./rust_macro"}
 
 [target.'cfg(target_os = "macos")'.dependencies]    ## windows、macos、linux、unix
 rust-embed = {version = "8.7.2", features = ["include-exclude"]}
