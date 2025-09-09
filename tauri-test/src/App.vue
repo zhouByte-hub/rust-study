@@ -4,10 +4,24 @@ import { invoke } from "@tauri-apps/api/core";
 
 const greetMsg = ref("");
 const name = ref("");
+const list = ref([])
 
 async function greet() {
   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
   greetMsg.value = await invoke("greet", { name: name.value });
+}
+
+async function userList() {
+  list.value = await invoke("get_user_list");
+}
+
+async function getUser(id) {
+  const user = await invoke("get_user", { id });
+  console.log(user);
+}
+
+async function save(user) {
+  await invoke("save_user", { user });
 }
 </script>
 
@@ -34,6 +48,14 @@ async function greet() {
     </form>
     <p>{{ greetMsg }}</p>
   </main>
+  <div>
+    <button @click="userList">用户列表</button>
+  </div>
+  <div>
+    <ul>
+      <li v-for="item in list" @click="save(item)">{{ item.name }}</li>
+    </ul>
+  </div>
 </template>
 
 <style scoped>
