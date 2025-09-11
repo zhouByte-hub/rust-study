@@ -8,3 +8,4 @@ pub mod sha;
 pub mod wild;
 pub mod winnow_demo;
 pub mod winnow_rust_demo;
+pub mod kafka_demo;
