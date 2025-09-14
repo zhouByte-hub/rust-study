@@ -13,3 +13,5 @@ stunclient = "0.4.1"
 reqwest = {version = "0.12.23", features=["json", "gzip", "stream"]}
 tokio = {version="1.47.1", features = ["full"]}
 futures-util = "0.3.31"
+
+reqwest-eventsource = "0.6.0"

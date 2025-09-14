@@ -1,9 +1,6 @@
 /**
- * 
+ *
  */
 
 #[cfg(test)]
-mod kafka_test{
-
-    
-}
+mod kafka_test {}

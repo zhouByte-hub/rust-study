@@ -66,6 +66,7 @@ async fn main() {
             .configure(form_request::query::query_config_service)
             .route("/sse", web::get().to(sse::sse_endpoint::sse_stream))
             .route("/front/{path:.*}", web::get().to(handle_web_request))
+            .route("/sse2", web::get().to(sse_handler))
     })
     .workers(10)
     // .keep_alive(val)
@@ -75,4 +76,38 @@ async fn main() {
     .run()
     .await
     .unwrap();
+}
+
+/**
+ * Rust与Web结合优先推荐的SSE方式
+ * async-stream = "0.3.6"
+ */
+use actix_web::Responder;
+use tokio::time::{Duration, interval};
+
+async fn sse_handler() -> impl Responder {
+    let stream = async_stream::stream! {
+        let mut interval = interval(Duration::from_secs(1));
+        let mut counter = 0_u32;
+
+        loop {
+            interval.tick().await;
+            counter += 1;
+            if counter == 10 {
+                break;
+            }
+
+            // 构造 SSE 消息
+            let message = format!("data: {{\"count\": {}}}\n", counter);
+
+            // ✅ 转换为 Bytes
+            yield Ok::<_, actix_web::Error>(web::Bytes::from(message));
+        }
+    };
+
+    HttpResponse::Ok()
+        .content_type("text/event-stream")
+        .insert_header(("Cache-Control", "no-cache"))
+        .insert_header(("Connection", "keep-alive"))
+        .streaming(stream)
 }

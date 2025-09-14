@@ -1,5 +1,4 @@
 use std::convert::Infallible;
-use std::time::Duration;
 
 use crate::sse::sender::SseSender;
 use actix_web::Responder;
@@ -7,7 +6,6 @@ use actix_web::web;
 use actix_web_lab::sse;
 use actix_web_lab::sse::Sse;
 use futures_util::StreamExt;
-use tokio::time::sleep;
 use tokio_stream::wrappers::BroadcastStream;
 /// 创建 SSE 流端点
 ///
