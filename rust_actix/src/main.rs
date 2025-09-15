@@ -11,6 +11,8 @@ pub mod form_request;
 pub mod sse;
 use crate::controller::{basic, json};
 use crate::sse::sender::SseSender;
+
+#[cfg(target_os = "windows")]
 use rust_embed::RustEmbed;
 
 /**
@@ -20,10 +22,12 @@ pub struct AppState {
     app_name: String,
 }
 
+#[cfg(target_os = "windows")]
 #[derive(RustEmbed)]
 #[folder = "web-front"]
 pub struct WebFront;
 
+#[cfg(target_os = "windows")]
 async fn handle_web_request(req: HttpRequest) -> HttpResponse {
     // 从请求中提取路径参数，是{path:.*}部分，不包含 /front 部分
     let path = req.match_info().query("path").to_string();
@@ -65,7 +69,7 @@ async fn main() {
             .configure(form_request::form::form_config_service)
             .configure(form_request::query::query_config_service)
             .route("/sse", web::get().to(sse::sse_endpoint::sse_stream))
-            .route("/front/{path:.*}", web::get().to(handle_web_request))
+            // .route("/front/{path:.*}", web::get().to(handle_web_request))
             .route("/sse2", web::get().to(sse_handler))
     })
     .workers(10)
