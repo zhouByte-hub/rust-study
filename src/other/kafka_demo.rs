@@ -8,15 +8,17 @@
  *      5、AdminClient：管理员客户端，用于管理 Kafka 集群
  */
 
-#[cfg(target_os="macos")]
+#[cfg(target_os = "macos")]
 #[cfg(test)]
 mod kafka_test {
     use rdkafka::{
         ClientConfig,
+        consumer::{Consumer, StreamConsumer, CommitMode},
         message::{Header, OwnedHeaders},
         producer::{FutureProducer, FutureRecord},
     };
     use tokio::time::Duration;
+    use tokio_stream::StreamExt;
 
     #[tokio::test]
     async fn future_producer_test() {
@@ -84,5 +86,39 @@ mod kafka_test {
                 panic!("Message production failed: {}", e);
             }
         }
+    }
+
+    #[tokio::test]
+    async fn future_consumer_test() {
+        // 创建Kafka消费者配置
+        let consumer: StreamConsumer = ClientConfig::new()
+            .set("group.id", "future_consumer_test")  // 使用唯一的消费者组ID
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .set("session.timeout.ms", "6000")
+            .set("enable.auto.commit", "false")
+            // 设置从最早的消息开始消费
+            .set("auto.offset.reset", "earliest")
+            // 禁用分区结束信号
+            .set("enable.partition.eof", "false")
+            .create()
+            .expect("Failed to create consumer");
+        
+        // 订阅主题
+        consumer.subscribe(&["test"]).expect("订阅失败");
+        println!("消费者已启动，等待消息...");
+        
+        while let Some(message) = consumer.stream().next().await {
+            match message {
+                Ok(message) => {
+                    println!("Received message: {:?}", message);
+                    // 手动提交偏移量
+                    consumer.commit_message(&message, CommitMode::Async).expect("提交偏移量失败");
+                }
+                Err(e) => {
+                    eprintln!("Error receiving message: {}", e);
+                }
+            }
+        }
+   
     }
 }
