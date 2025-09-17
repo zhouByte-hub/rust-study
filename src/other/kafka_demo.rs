@@ -12,7 +12,7 @@
 #[cfg(test)]
 mod kafka_test {
     use rdkafka::{
-        consumer::{CommitMode, Consumer, StreamConsumer}, message::{Header, OwnedHeaders}, producer::{FutureProducer, FutureRecord}, ClientConfig, Offset, TopicPartitionList
+        admin::{AdminClient, AdminOptions, NewTopic, TopicReplication}, client::DefaultClientContext, consumer::{CommitMode, Consumer, StreamConsumer}, message::{Header, OwnedHeaders}, producer::{FutureProducer, FutureRecord}, ClientConfig, Offset, TopicPartitionList
     };
     use tokio::time::Duration;
     use tokio_stream::StreamExt;
@@ -181,5 +181,30 @@ mod kafka_test {
             println!("partition: {}, offset: {:?}", element.partition(), element.offset());
         }
 
+    }
+
+    /**
+     * 创建主题
+     */
+    #[tokio::test]
+    async fn admin_test1(){
+        let admin_client: AdminClient<DefaultClientContext> = ClientConfig::new()
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .create()
+            .expect("Failed to create admin client");
+
+        let topic = NewTopic::new("topic_test", 1, TopicReplication::Fixed(1));
+        let options = AdminOptions::new().request_timeout(Some(Duration::from_secs(30)));
+        let result = admin_client.create_topics(&[topic], &options).await.unwrap();
+        for item in result {
+            match item {
+                Ok(topic) => {
+                    println!("topic: {:?}", topic);
+                }
+                Err(e) => {
+                    eprintln!("Failed to create topic: {:?}", e);
+                }
+            }
+        }
     }
 }
