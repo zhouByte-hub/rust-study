@@ -12,10 +12,7 @@
 #[cfg(test)]
 mod kafka_test {
     use rdkafka::{
-        ClientConfig,
-        consumer::{Consumer, StreamConsumer, CommitMode},
-        message::{Header, OwnedHeaders},
-        producer::{FutureProducer, FutureRecord},
+        consumer::{CommitMode, Consumer, StreamConsumer}, message::{Header, OwnedHeaders}, producer::{FutureProducer, FutureRecord}, ClientConfig, Offset, TopicPartitionList
     };
     use tokio::time::Duration;
     use tokio_stream::StreamExt;
@@ -120,5 +117,69 @@ mod kafka_test {
             }
         }
    
+    }
+
+
+    /**
+     * 从特定分区和偏移量进行消费
+     */
+    #[tokio::test]
+    async fn future_consumer_test2(){
+        let consumer: StreamConsumer = ClientConfig::new()
+            .set("group.id", "future_consumer_test")  // 使用唯一的消费者组ID
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .set("session.timeout.ms", "6000")
+            .set("enable.auto.commit", "false")
+            // 设置从最早的消息开始消费
+            .set("auto.offset.reset", "earliest")
+            // 禁用分区结束信号
+            .set("enable.partition.eof", "false")
+            .create()
+            .expect("Failed to create consumer");
+
+        // 设置分区和偏移量
+        let mut topic_partition_list = TopicPartitionList::new();
+        topic_partition_list.add_partition_offset("test", 0, Offset::Beginning).unwrap();
+
+        consumer.assign(&topic_partition_list).unwrap();
+
+        while let Some(message) = consumer.stream().next().await {
+            match message {
+                Ok(message) => {
+                    println!("Received message: {:?}", message);
+                    // 手动提交偏移量
+                    consumer.commit_message(&message, CommitMode::Async).expect("提交偏移量失败");
+                }
+                Err(e) => {
+                    eprintln!("Error receiving message: {}", e);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 获取消费者位置
+     */
+    #[tokio::test]
+    async fn future_consumer_test3() {
+        let consumer: StreamConsumer = ClientConfig::new()
+            .set("group.id", "future_consumer_test")  // 使用唯一的消费者组ID
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .set("session.timeout.ms", "6000")
+            .set("enable.auto.commit", "false")
+            // 设置从最早的消息开始消费
+            .set("auto.offset.reset", "earliest")
+            // 禁用分区结束信号
+            .set("enable.partition.eof", "false")
+            .create()
+            .expect("Failed to create consumer");
+
+        // 获取消费者在每个分区的当前偏移量
+        let position = consumer.position().unwrap();
+        for element in position.elements() {
+            println!("partition: {}, offset: {:?}", element.partition(), element.offset());
+        }
+
     }
 }
