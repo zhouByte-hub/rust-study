@@ -16,10 +16,11 @@ pub mod models;
  *
  * cargo install sea-orm-cli
  * 安装上述工具可以通过命令生成模型：
- *      sea-orm-cli generate model -u mysql://root:123456@localhost:3306/test -o src/database/models
+ *      sea-orm-cli generate entity -u mysql://root:123456@localhost:3306/test -o src/database/models
  * 生成的模型文件会包含实体结构体、查询方法、关联关系等。
  *
  */
 pub mod mysql;
 pub mod postgresql;
 pub mod redis_demo;
+pub mod sqlite_demo;
