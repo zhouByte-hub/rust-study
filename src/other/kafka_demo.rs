@@ -14,8 +14,8 @@ mod kafka_test {
     use rdkafka::{
         ClientConfig, Offset, TopicPartitionList,
         admin::{
-            AdminClient, AdminOptions, AlterConfig, NewPartitions, NewTopic,
-            ResourceSpecifier, TopicReplication,
+            AdminClient, AdminOptions, AlterConfig, NewPartitions, NewTopic, ResourceSpecifier,
+            TopicReplication,
         },
         client::DefaultClientContext,
         consumer::{CommitMode, Consumer, StreamConsumer},
@@ -434,37 +434,38 @@ mod kafka_test {
      * 水位线分为 low watermark 和 high watermark 两种。
      * low watermark 表示消费者当前能够消费的最早的消息的偏移量，
      * high watermark 表示生产者当前能够写入的最新的消息的偏移量。
-     * 
+     *
      * Lag指消费者当前落后于最新消息的程度 —— 即“还有多少条消息没来得及消费
      * Lag = 分区的最新消息偏移量（High Watermark） - 消费者已消费的偏移量（Consumer Offset）
      */
     #[tokio::test]
     async fn lag_test() {
-        use rdkafka::consumer::{BaseConsumer, Consumer};
-        use rdkafka::config::ClientConfig;
         use rdkafka::TopicPartitionList;
-        
+        use rdkafka::config::ClientConfig;
+        use rdkafka::consumer::{BaseConsumer, Consumer};
+
         // 创建管理员客户端
         let admin_client: AdminClient<DefaultClientContext> = ClientConfig::new()
             .set("bootstrap.servers", "43.139.97.119:9092")
             .create()
             .expect("Failed to create admin client");
-        
+
         // 获取主题的元数据，包括所有分区信息
         let metadata = admin_client
             .inner()
             .fetch_metadata(None, Timeout::from(Duration::from_secs(5)))
             .unwrap();
-        
+
         // 获取主题的所有分区
-        let topic_metadata = metadata.topics()
+        let topic_metadata = metadata
+            .topics()
             .iter()
             .find(|topic| topic.name() == "test")
             .expect("Topic 'test' not found");
-        
+
         let partitions = topic_metadata.partitions();
         println!("Topic 'test' has {} partitions", partitions.len());
-        
+
         // 创建消费者客户端
         let consumer: BaseConsumer = ClientConfig::new()
             .set("bootstrap.servers", "43.139.97.119:9092")
@@ -472,44 +473,49 @@ mod kafka_test {
             .set("enable.auto.commit", "false")
             .create()
             .expect("Failed to create consumer");
-        
+
         // 创建主题分区列表
         let mut tpl = TopicPartitionList::new();
         for partition in partitions {
             tpl.add_partition("test", partition.id());
         }
-        
+
         // 获取消费者在分区的已提交偏移量
-        let committed_offsets = consumer.committed(Duration::from_secs(5))
+        let committed_offsets = consumer
+            .committed(Duration::from_secs(5))
             .unwrap_or_else(|_| panic!("Failed to fetch committed offsets"));
-        
+
         // 获取消费者在分区的当前位置
-        let position = consumer.position()
+        let position = consumer
+            .position()
             .unwrap_or_else(|_| panic!("Failed to fetch position"));
-        
+
         // 遍历所有分区，计算每个分区的滞后量
         for partition in partitions {
             let partition_id = partition.id();
-            
+
             // 获取分区的最新偏移量(low watermark, high watermark)
             let watermarks = admin_client
                 .inner()
                 .fetch_watermarks("test", partition_id, Timeout::from(Duration::from_secs(5)))
-                .unwrap_or_else(|_| panic!("Failed to fetch watermarks for partition {}", partition_id));
-            
+                .unwrap_or_else(|_| {
+                    panic!("Failed to fetch watermarks for partition {}", partition_id)
+                });
+
             // 从已提交偏移量中提取当前分区的偏移量
-            let consumer_offset = if let Some(elem) = committed_offsets.find_partition("test", partition_id) {
-                elem.offset()
-            } else {
-                // 如果没有提交的偏移量，从当前位置获取
-                if let Some(elem) = position.find_partition("test", partition_id) {
+            let consumer_offset =
+                if let Some(elem) = committed_offsets.find_partition("test", partition_id) {
                     elem.offset()
                 } else {
-                    // 如果都没有，默认为0
-                    rdkafka::Offset::Beginning
-                }
-            };
-            
+                    // 如果没有提交的偏移量，从当前位置获取
+                    if let Some(elem) = position.find_partition("test", partition_id) {
+                        elem.offset()
+                    } else {
+                        // 如果都没有，默认为0
+                        rdkafka::Offset::Beginning
+                    }
+                };
+
             // 将 Offset 枚举转换为 i64
             let consumer_offset_i64 = match consumer_offset {
                 rdkafka::Offset::Beginning => 0,
@@ -519,13 +525,14 @@ mod kafka_test {
                 rdkafka::Offset::Stored => 0,
                 rdkafka::Offset::OffsetTail(offset) => offset,
             };
-            
+
             // 计算滞后量：分区最新偏移量 - 消费者偏移量
             let lag = watermarks.1.saturating_sub(consumer_offset_i64);
-            
-            println!("Partition {}: High Watermark = {}, Consumer Offset = {}, Lag = {}", 
-                     partition_id, watermarks.1, consumer_offset_i64, lag);
+
+            println!(
+                "Partition {}: High Watermark = {}, Consumer Offset = {}, Lag = {}",
+                partition_id, watermarks.1, consumer_offset_i64, lag
+            );
         }
     }
-
 }
