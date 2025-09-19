@@ -13,7 +13,10 @@
 mod kafka_test {
     use rdkafka::{
         ClientConfig, Offset, TopicPartitionList,
-        admin::{AdminClient, AdminOptions, NewTopic, TopicReplication},
+        admin::{
+            AdminClient, AdminOptions, AlterConfig, NewPartitions, NewTopic,
+            ResourceSpecifier, TopicReplication,
+        },
         client::DefaultClientContext,
         consumer::{CommitMode, Consumer, StreamConsumer},
         message::{Header, OwnedHeaders},
@@ -322,4 +325,109 @@ mod kafka_test {
             .collect::<Vec<String>>();
         println!("metadata: {:?}", topic_names);
     }
+
+    /**
+     * 更新主题配置
+     */
+    #[tokio::test]
+    async fn update_topic_config() {
+        // 创建Kafka管理员客户端
+        let admin_client: AdminClient<DefaultClientContext> = ClientConfig::new()
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .create()
+            .expect("Failed to create admin client");
+
+        // 创建并配置AlterConfig，使用链式调用避免所有权问题
+        let mut alter_config = AlterConfig::new(ResourceSpecifier::Topic("test"));
+
+        alter_config = alter_config.set("cleanup.policy", "compact");
+
+        // 设置管理员选项
+        let options = AdminOptions::new().request_timeout(Some(Duration::from_secs(10)));
+
+        // 执行配置更新
+        admin_client
+            .alter_configs(&[alter_config], &options)
+            .await
+            .unwrap();
+    }
+
+    /**
+     * 获取主题配置列表
+     */
+    #[tokio::test]
+    async fn config_list() {
+        let admin_client: AdminClient<DefaultClientContext> = ClientConfig::new()
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .create()
+            .expect("Failed to create admin client");
+
+        let options = AdminOptions::new().request_timeout(Some(Duration::from_secs(10)));
+
+        // 获取 test 主题的所有配置
+        let config = admin_client
+            .describe_configs(&[ResourceSpecifier::Topic("test")], &options)
+            .await
+            .unwrap();
+        for item in config {
+            match item {
+                Ok(config) => {
+                    for item in config.entries {
+                        println!("{}: {}", item.name, item.value.unwrap());
+                    }
+                }
+                Err(e) => {
+                    eprintln!("Failed to describe config: {:?}", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 为主题创建分区
+     */
+    #[tokio::test]
+    async fn create_partitions() {
+        let admin_client: AdminClient<DefaultClientContext> = ClientConfig::new()
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .create()
+            .expect("Failed to create admin client");
+
+        // 新建分区可以相当于修改分区
+        let options = AdminOptions::new().request_timeout(Some(Duration::from_secs(10)));
+
+        let new_partitions = NewPartitions::new("test", 3);
+        admin_client
+            .create_partitions(&[new_partitions], &options)
+            .await
+            .unwrap();
+    }
+
+    /**
+     * 获取主题的分区数
+     */
+    #[tokio::test]
+    async fn partition_count() {
+        let admin_client: AdminClient<DefaultClientContext> = ClientConfig::new()
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .create()
+            .expect("Failed to create admin client");
+
+        let meta = admin_client
+            .inner()
+            .fetch_metadata(Some("test"), Timeout::from(Duration::from_secs(5)))
+            .unwrap();
+
+        let partition_count = meta
+            .topics()
+            .iter()
+            .filter(|item| item.name() == "test")
+            .next()
+            .unwrap()
+            .partitions()
+            .len();
+        println!("partition count: {}", partition_count);
+    }
+
+    
 }
