@@ -2,6 +2,7 @@ pub mod database;
 pub mod error;
 pub mod file;
 pub mod logs;
+pub mod mcp;
 pub mod other;
 pub mod search;
 pub mod serialize;
@@ -9,7 +10,6 @@ pub mod shell;
 pub mod system;
 pub mod web;
 pub mod windows;
-pub mod mcp;
 
 fn main() {}
 
