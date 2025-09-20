@@ -28,6 +28,7 @@ pub struct AppState {
 pub struct WebFront;
 
 #[cfg(target_os = "windows")]
+#[allow(dead_code)]
 async fn handle_web_request(req: HttpRequest) -> HttpResponse {
     // 从请求中提取路径参数，是{path:.*}部分，不包含 /front 部分
     let path = req.match_info().query("path").to_string();

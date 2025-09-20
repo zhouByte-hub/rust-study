@@ -9,6 +9,7 @@ pub mod shell;
 pub mod system;
 pub mod web;
 pub mod windows;
+pub mod mcp;
 
 fn main() {}
 

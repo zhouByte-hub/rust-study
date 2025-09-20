@@ -80,6 +80,7 @@ sha2 = "0.10.9"
 once_cell = "1.21.3"
 derive_builder = "0.20.2"
 winnow = "0.7.13"
+rmcp = {version = "0.6.4", features = ["server", "macros", "client", "transport-sse-server","transport-io","transport-streamable-http-server"]}
 
 [dev-dependencies]
 mockall = "0.13.1"
