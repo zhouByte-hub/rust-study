@@ -2,7 +2,6 @@ pub mod database;
 pub mod error;
 pub mod file;
 pub mod logs;
-pub mod mcp;
 pub mod other;
 pub mod search;
 pub mod serialize;
