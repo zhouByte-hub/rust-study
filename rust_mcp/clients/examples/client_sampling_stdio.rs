@@ -47,9 +47,7 @@ impl ClientHandler for SimpleClient {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = SimpleClient;
     // 获取当前目录，并与 "rust_mcp" 和 "servers" 连接，得到服务器目录
-    let servers_dir = std::env::current_dir()?
-        .join("rust_mcp")
-        .join("servers");
+    let servers_dir = std::env::current_dir()?.join("rust_mcp").join("servers");
 
     // 使用 TokioChildProcess 传输来服务客户端
     let client = client

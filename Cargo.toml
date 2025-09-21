@@ -98,5 +98,9 @@ name = "server_sampling_stdio"
 path = "rust_mcp/servers/examples/servers_sampling_stdio.rs"
 
 [[example]]
+name = "prompt_server_stdio"
+path = "rust_mcp/servers/examples/prompt_server_stdio.rs"
+
+[[example]]
 name = "client_sampling_stdio"
 path = "rust_mcp/clients/examples/client_sampling_stdio.rs"
