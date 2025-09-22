@@ -92,7 +92,7 @@ rust_macro = {path = "./rust_macro"}
 rust-embed = {version = "8.7.2", features = ["include-exclude"]}
 rdkafka = "0.38.0"
 
-
+###### MCP 服务端
 [[example]]
 name = "server_sampling_stdio"
 path = "rust_mcp/servers/examples/servers_sampling_stdio.rs"
@@ -102,5 +102,16 @@ name = "prompt_server_stdio"
 path = "rust_mcp/servers/examples/prompt_server_stdio.rs"
 
 [[example]]
+name = "count_server_stdio"
+path = "rust_mcp/servers/examples/count_server_stdio.rs"
+
+
+
+##### MCP客户端
+[[example]]
 name = "client_sampling_stdio"
 path = "rust_mcp/clients/examples/client_sampling_stdio.rs"
+
+[[example]]
+name = "count_client_stdio"
+path = "rust_mcp/clients/examples/count_client_stdio.rs"
