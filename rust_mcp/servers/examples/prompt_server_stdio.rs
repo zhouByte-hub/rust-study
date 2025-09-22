@@ -7,8 +7,8 @@ use rmcp::{
     service::RequestContext,
     transport::stdio,
 };
-use std::sync::Arc;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
 use tokio::sync::RwLock;
 
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
@@ -106,8 +106,6 @@ impl Default for PromptServer {
  */
 #[prompt_router]
 impl PromptServer {
-    
-
     /**
      * 1、定义提示模板 ：该宏将一个普通的方法转换为一个可调用的提示模板，每个提示都有一个名称和描述。
      * 2、参数处理 ：宏会处理方法的参数，将它们转换为提示模板可以接受的格式。例如， Parameters(args): Parameters<CodeReviewArgs> 这种参数形式就是由宏处理的，它会自动将传入的 JSON 数据反序列化为 CodeReviewArgs 结构体。
@@ -192,7 +190,6 @@ impl PromptServer {
         Parameters(args): Parameters<DataAnalysisArgs>,
         ctx: RequestContext<RoleServer>,
     ) -> Result<Vec<PromptMessage>, McpError> {
-
         // Could use ctx to check for capabilities or metadata
         let _request_id = &ctx.id;
 

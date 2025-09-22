@@ -200,6 +200,32 @@ mod kafka_test {
     }
 
     /**
+     * 获取消费者水印偏移量
+     */
+    #[tokio::test]
+    async fn future_consumer_test4() {
+        let consumer: StreamConsumer = ClientConfig::new()
+            .set("group.id", "future_consumer_test") // 使用唯一的消费者组ID
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .set("session.timeout.ms", "6000")
+            .set("enable.auto.commit", "false")
+            // 设置从最早的消息开始消费
+            .set("auto.offset.reset", "earliest")
+            // 禁用分区结束信号
+            .set("enable.partition.eof", "false")
+            .create()
+            .expect("Failed to create consumer");
+
+        let mut tpl = TopicPartitionList::new();
+        tpl.add_partition("test", 0);
+
+        let watermarks = consumer
+            .fetch_watermarks("test", 0, Timeout::from(Duration::from_secs(5)))
+            .unwrap();
+        println!("watermarks: {:?}", watermarks);
+    }
+
+    /**
      * 创建主题
      */
     #[tokio::test]
@@ -230,6 +256,9 @@ mod kafka_test {
         }
     }
 
+    /**
+     * 使用 Admin 创建主题
+     */
     #[tokio::test]
     async fn admin_test2() {
         let admin_client: AdminClient<DefaultClientContext> = ClientConfig::new()
@@ -282,6 +311,9 @@ mod kafka_test {
         };
     }
 
+    /**
+     * 使用 Admin 删除主题
+     */
     #[tokio::test]
     async fn admin_delete_topic() {
         let admin_client: AdminClient<DefaultClientContext> = ClientConfig::new()
@@ -534,5 +566,133 @@ mod kafka_test {
                 partition_id, watermarks.1, consumer_offset_i64, lag
             );
         }
+    }
+}
+
+#[cfg(test)]
+mod transaction_test {
+    use rdkafka::util::Timeout;
+    use rdkafka::{
+        ClientConfig,
+        producer::{FutureProducer, FutureRecord, Producer},
+    };
+    use tokio::time::Duration;
+
+    /**
+     * 开启事务操作
+     */
+    #[tokio::test]
+    async fn transaction_test_v1() {
+        let producer: FutureProducer = ClientConfig::new()
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .set("transactional.id", "test_transactional_id")
+            .set("enable.idempotence", "true")
+            .create()
+            .expect("Transactional producer creation failed");
+
+        /*
+           这个函数确保先前具有相同 transactional.id 的生产者发起的任何事务都能完成。任何此类先前生产者留下的未完成事务将被中止。
+           一旦先前事务被锁定，这个函数将获取一个内部生产者 ID 和时间戳，这些将被用于此生产者发送的所有事务性消息。
+           如果这个函数成功返回，只有在事务活动时才能向此生产者发送消息。参见 [Producer::begin_transaction]。
+           这个函数可能会阻塞指定的超时时间。
+        */
+        producer
+            .init_transactions(Timeout::from(Duration::from_secs(5)))
+            .unwrap();
+
+        // 开始事务
+        producer.begin_transaction().unwrap();
+
+        let message = vec![("name", "zhangsan"), ("address", "beijing")];
+        // 发送消息
+        for msg in message {
+            let record = FutureRecord::to("test").key(msg.0).payload(msg.1);
+            producer
+                .send(record, Timeout::from(Duration::from_secs(5)))
+                .await
+                .unwrap();
+        }
+        // 提交事务
+        producer
+            .commit_transaction(Timeout::from(Duration::from_secs(5)))
+            .unwrap();
+    }
+}
+
+#[cfg(test)]
+mod context {
+    use rdkafka::ClientConfig;
+    use rdkafka::producer::FutureProducer;
+    use rdkafka::producer::FutureRecord;
+    use rdkafka::producer::Producer;
+    use rdkafka::util::Timeout;
+    use rdkafka::{ClientContext, producer::ProducerContext};
+    use tokio::time::Duration;
+
+    struct LogginProducerContext;
+
+    impl ClientContext for LogginProducerContext {}
+
+    impl ProducerContext for LogginProducerContext {
+        type DeliveryOpaque = ();
+
+        fn delivery(
+            &self,
+            delivery_result: &rdkafka::message::DeliveryResult<'_>,
+            _delivery_opaque: Self::DeliveryOpaque,
+        ) {
+            match delivery_result {
+                Ok(msg) => println!("Message delivered: {:?}", msg),
+                Err((err, msg)) => println!("Delivery failed: {:?}, message: {:?}", err, msg),
+            }
+        }
+
+        fn get_custom_partitioner(&self) -> Option<&rdkafka::producer::NoCustomPartitioner> {
+            None
+        }
+    }
+
+    /**
+     * isolation.level： 是一个消费者（Consumer）配置参数，用于控制消费者在读取消息时如何处理未提交的事务性消息。这个配置主要与 Kafka 的事务性写入（Transactional Writes）和读已提交（Read Committed）语义相关。
+     *      1、read_uncommitted：消费者可以读取所有消息，包括：已提交的事务消息、未提交的事务消息、非事务性消息；消费者可能会看到最终会被回滚（abort）的消息，可能导致脏读。
+     *      2、read_committed：消费者只能读取已提交的事务消息，不能读取未提交的事务消息。这确保了消费者只能看到最终被提交的消息，避免了脏读问题。
+     *
+     * enable.idempotenceP：是 Apache Kafka 生产者（Producer）的一个重要配置属性，用于启用幂等性生产者（Idempotent Producer）功能。
+     * 当 enable.idempotence=true 时，Kafka 会保证单个生产者实例在重试发送消息的过程中，不会向主题（Topic）中重复写入同一条消息。
+     * 换句话说，即使由于网络问题、Broker 故障等原因导致发送失败并触发重试，Kafka 也能确保每条消息在日志中恰好出现一次（Exactly Once Semantics, EOS 的一部分）。
+     */
+    #[tokio::test]
+    async fn test_producer_context() {
+        let producer: FutureProducer<LogginProducerContext> = ClientConfig::new()
+            .set("bootstrap.servers", "43.139.97.119:9092")
+            .set("message.timeout.ms", "30000")
+            .set("acks", "1")
+            .set("retries", "3")
+            .set("request.timeout.ms", "30000")
+            .set("transactional.id", "test_transactional_id")
+            .set("enable.idempotence", "true")
+            .set("acks", "all")
+            .create_with_context(LogginProducerContext)
+            .expect("Failed to create producer");
+
+        producer
+            .init_transactions(Timeout::from(Duration::from_secs(5)))
+            .unwrap();
+
+        producer.begin_transaction().unwrap();
+
+        let message = vec![("name", "zhangsan"), ("address", "beijing")];
+        // 发送消息
+        for msg in message {
+            let record = FutureRecord::to("test").key(msg.0).payload(msg.1);
+            producer
+                .send(record, Timeout::from(Duration::from_secs(5)))
+                .await
+                .unwrap();
+        }
+        // 提交事务
+        producer
+            .commit_transaction(Timeout::from(Duration::from_secs(5)))
+            .unwrap();
     }
 }
