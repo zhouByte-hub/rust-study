@@ -6,6 +6,21 @@ use serde::{Deserialize, Serialize};
 use rmcp::schemars::JsonSchema;
 use rmcp::handler::server::wrapper::Parameters;
 
+/**
+ * Trea MCP 配置如下：
+{
+    "mcpServers": {
+        "email-server": {
+        "name": "Email Server",
+        "type": "sse",
+        "url": "http://127.0.0.1:8080/sse",
+        "description": "提供发送邮件和获取联系人列表的工具"
+        }
+    }
+}
+ */
+
+
 /// 发送邮件的参数
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[schemars(description = "发送邮件的参数")]
