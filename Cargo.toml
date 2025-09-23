@@ -93,6 +93,7 @@ rmcp = {version = "0.6.4", features = [
     "schemars"
     ]}
 tokio-util = { version = "0.7" }
+clipboard = "0.5.0"
 
 [dev-dependencies]
 mockall = "0.13.1"

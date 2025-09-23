@@ -569,6 +569,7 @@ mod kafka_test {
     }
 }
 
+#[cfg(target_os = "macos")]
 #[cfg(test)]
 mod transaction_test {
     use rdkafka::util::Timeout;
@@ -619,6 +620,7 @@ mod transaction_test {
     }
 }
 
+#[cfg(target_os = "macos")]
 #[cfg(test)]
 mod context {
     use rdkafka::ClientConfig;
