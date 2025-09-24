@@ -11,6 +11,26 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
+/**
+{
+  "mcpServers": {
+    "prompt-server": {
+      "command": "cargo",
+      "args": [
+        "run",
+        "--example",
+        "prompt_server_stdio",
+        "--manifest-path",
+        "e:\\project\\rust\\rust-study\\rust_mcp\\servers\\Cargo.toml"
+      ],
+      "env": {
+        "CARGO_MANIFEST_DIR": "e:\\project\\rust\\rust-study\\rust_mcp\\servers"
+      }
+    }
+  }
+}
+ */
+
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[schemars(description = "Code review parameters")]
 pub struct CodeReviewArgs {
