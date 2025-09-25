@@ -1,3 +1,4 @@
+pub mod excel_demo;
 pub mod include_dir_demo;
 pub mod rust_self;
 pub mod tar_demo;
