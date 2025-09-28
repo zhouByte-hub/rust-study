@@ -13,11 +13,19 @@
 
 #[cfg(test)]
 mod enigo_test {
-    use enigo::{Enigo, Mouse, Settings};
+    use enigo::{Enigo, Keyboard, Mouse, Settings};
 
     #[test]
     fn enigo_mouse_test_1(){
         let mut mouse = Enigo::new(&Settings::default()).unwrap();
         mouse.move_mouse(100, 100, enigo::Coordinate::Abs).unwrap();
+    }
+
+    #[test]
+    fn enigo_mouse_click(){
+        let mut mouse = Enigo::new(&Settings::default()).unwrap();
+        mouse.move_mouse(0, 0, enigo::Coordinate::Abs).unwrap();
+        mouse.button(enigo::Button::Right, enigo::Direction::Click).unwrap();
+        mouse.text("Hello World! here is a lot of text  ❤️").unwrap();
     }
 }
