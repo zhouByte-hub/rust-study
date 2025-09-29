@@ -99,6 +99,7 @@ tokio-util = { version = "0.7" }
 clipboard = "0.5.0"
 crossterm = "0.29.0"
 enigo = "0.6.1"
+ctor = "0.5.0"
 
 
 [dev-dependencies]
