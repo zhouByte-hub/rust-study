@@ -13,3 +13,4 @@ pub mod winnow_demo;
 pub mod winnow_rust_demo;
 pub mod enigo_demo;
 pub mod ctor_demo;
+pub mod getset_demo;
