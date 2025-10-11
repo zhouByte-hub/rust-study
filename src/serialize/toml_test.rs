@@ -25,7 +25,7 @@ use serde::{Deserialize, Serialize};
 * }
 * 而ini就只支持单一的格式String，如果碰到其他的就需要手动转换
 */
-
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize)]
 struct User {
     username: String,
@@ -33,6 +33,7 @@ struct User {
     email: String,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize)]
 struct Config {
     ip: String,
@@ -40,6 +41,7 @@ struct Config {
     keys: Keys,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize)]
 struct Keys {
     github: String,

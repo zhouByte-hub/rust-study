@@ -1,4 +1,5 @@
 #[cfg(target_os = "macos")]
+#[allow(dead_code)]
 mod embed_test {
     use rust_embed::Embed;
 

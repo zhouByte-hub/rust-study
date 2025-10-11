@@ -55,6 +55,7 @@ mac_address = "1.1.8"
 bytes = "1.10.1"
 ctrlc = "3.4.7"
 rdev = "0.5.3"
+lru = "0.16.1"
 
 # web
 qrcode-generator = "5.0.0"
