@@ -3,7 +3,7 @@
  * 
  * 用于生成字段最基本的 getter 和 setter 的程序宏。
  */
-
+#[allow(dead_code)]
 #[cfg(test)]
 mod getset_test{
     use getset::{Getters, Setters, WithSetters, MutGetters, CopyGetters, CloneGetters};

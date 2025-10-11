@@ -15,7 +15,7 @@ mod include_test {
 
     // 在编译时会判断文件是否存在，因为需要被编译到二进制中
     #[cfg(target_os = "macos")]
-    static FILE_DIR: Dir = include_dir!("/Users/zhoujianing/Project/rust/rust-study/src/file");
+    static FILE_DIR: Dir = include_dir!("src/file");
 
     #[cfg(target_os = "windows")]
     static FILE_DIR: Dir = include_dir!("E:\\project\\rust\\rust-study\\src\\file");
@@ -30,7 +30,7 @@ mod include_test {
 
     #[cfg(target_os = "macos")]
     static SERIALIZE_DIR: Dir =
-        include_dir!("/Users/zhoujianing/Project/rust/rust-study/src/serialize");
+        include_dir!("src/serialize");
 
     #[cfg(target_os = "windows")]
     static SERIALIZE_DIR: Dir = include_dir!("E:\\project\\rust\\rust-study\\src\\serialize");
