@@ -21,6 +21,11 @@ rust-study/
 ├── rust_async/           # 异步编程学习
 ├── rust_net/             # 网络编程学习
 ├── rust_actix/           # Actix Web 框架学习
+├── rust_wgpu/            # WGPU 图形编程学习
+├── rust_macro/           # Rust 宏编程学习
+├── rust_mcp/             # 多线程/进程通信学习
+├── tauri-test/           # Tauri 桌面应用开发学习
+├── study_content.md      # 学习内容文档
 └── Cargo.toml           # 项目配置文件
 ```
 
@@ -101,6 +106,26 @@ rust-study/
 
 - **winapi**: 对整个 Windows API 的原始 FFI 绑定
 - **windows**: 允许调用任何 Windows API 的 crate
+
+### 图形编程 (rust_wgpu/)
+
+- **winit**: 跨平台窗口管理库，用于创建窗口和处理事件
+- **wgpu**: 现代化的跨平台图形 API 抽象层，支持 Vulkan、Metal、D3D12 等
+
+### 宏编程 (rust_macro/)
+
+- **声明式宏**: 使用 macro_rules! 定义的宏示例
+- **派生宏**: 自定义派生宏实现，如 getter 自动生成
+
+### 多线程/进程通信 (rust_mcp/)
+
+- **客户端-服务器架构**: 客户端和服务器通信模式示例
+
+### Tauri 桌面应用 (tauri-test/)
+
+- **WebView 集成**: 使用 Tauri 构建轻量级桌面应用
+- **前端交互**: 与 Vue.js 等前端框架的集成示例
+- **跨平台**: 支持 Windows、macOS 和 Linux 的桌面应用开发
 
 ## 依赖库详解
 
