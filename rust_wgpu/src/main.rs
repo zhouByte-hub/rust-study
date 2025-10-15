@@ -1,5 +1,6 @@
 pub(crate) mod common;
 pub(crate) mod window;
+pub(crate) mod ui;
 
 use crate::window::{init::App, send_event::CustomEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
