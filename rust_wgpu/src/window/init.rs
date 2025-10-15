@@ -1,14 +1,34 @@
-use winit::application::ApplicationHandler;
-use winit::event::WindowEvent;
-use winit::event_loop::{ActiveEventLoop};
-use winit::window::{Window, WindowId};
+use std::thread;
+use std::time::Duration;
 
+use winit::application::ApplicationHandler;
+use winit::dpi::LogicalSize;
+use winit::event::WindowEvent;
+use winit::event_loop::{ActiveEventLoop, EventLoopProxy};
+use winit::window::{Window, WindowId, Theme};
+
+use crate::window::send_event::{CustomEvent, TestApp};
+use crate::window::loop_event::loop_event_run;
+
+/**
+ * 定义一个结构体用来存放窗口对象以及其他公共对象
+ */
 #[derive(Default)]
 pub struct App {
     window: Option<Window>,
+    proxy: Option<EventLoopProxy<Box<dyn CustomEvent>>>,
 }
 
-impl ApplicationHandler for App {
+impl App {
+    /**
+     * 初始化事件循环代理
+     */
+    pub fn init_proxy(&mut self, proxy: EventLoopProxy<Box<dyn CustomEvent>>) {
+        self.proxy = Some(proxy);
+    }
+}
+
+impl ApplicationHandler<Box<dyn CustomEvent>> for App {
 
     /**
      * 应用程序恢复运行时调用
@@ -17,7 +37,12 @@ impl ApplicationHandler for App {
      *  3. 当用户从最小化状态恢复窗口时
      */
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        self.window = Some(event_loop.create_window(Window::default_attributes()).unwrap());
+        let attributes = Window::default_attributes()
+            //设置窗口标题
+            .with_title("RUST-STUDY:WGPU:WINIT")
+            //设置窗口主题为暗色
+            .with_theme(Some(Theme::Dark));
+        self.window = Some(event_loop.create_window(attributes).unwrap());
     }
 
     /**
@@ -38,6 +63,18 @@ impl ApplicationHandler for App {
             // 窗口大小变化事件：当窗口尺寸被改变时触发，提供新的窗口大小
             WindowEvent::Resized(size) => {
                 println!("The window was resized to {:?}", size);
+                /* 尺寸单位
+                 *  LogicalInsets：表示窗口的内部边距（内边距：窗口内容与窗口边框之间的距离）的逻辑尺寸,逻辑尺寸会根据显示器的 DPI（每英寸点数）进行缩放。
+                 *  LogicalPosition：表示窗口或光标的逻辑位置坐标，使用逻辑单位（如逻辑像素）表示位置，逻辑位置会根据窗口的位置和缩放因子进行调整。
+                 *  LogicalSize：表示窗口或组件的逻辑尺寸，使用逻辑单位（如逻辑像素）表示尺寸，逻辑尺寸会根据显示器的 DPI（每英寸点数）进行缩放。
+                 *  LogicalUnit：定义逻辑测量单位的基础类型，通常是与设备无关的单位，如逻辑像素
+                 * 
+                 *  PhysicalInsets：表示窗口内部边距的物理尺寸，使用实际物理像素单位，不考虑 DPI 缩放，适用于需要精确像素控制的场景。
+                 *  PhysicalPosition：表示窗口或光标的物理位置坐标，使用物理像素单位，不受 DPI 缩放影响。
+                 *  PhysicalSize：表示窗口或元素的物理尺寸（宽度和高度），使用实际物理像素单位。
+                 *  PhysicalUnit：定义物理测量单位的基础类型，通常是实际物理像素单位。
+                 */
+                self.window.as_ref().unwrap().set_max_inner_size(Some(LogicalSize::new(500.0, 400.0)));
             },
             // 窗口焦点变化事件：当窗口获得或失去键盘焦点时触发
             WindowEvent::Focused(focused) => {
@@ -145,14 +182,17 @@ impl ApplicationHandler for App {
     /**
      * 在事件循环开始处理新的一批事件之前被调用。
      */
-    fn new_events(&mut self, _event_loop: &ActiveEventLoop, cause: winit::event::StartCause) {
-        println!("new_events: {:?}", cause);
+    fn new_events(&mut self, _event_loop: &ActiveEventLoop, _cause: winit::event::StartCause) {
+        // println!("new_events: {:?}", cause);
     }
 
     /**
      * 当通过 EventLoopProxy 发送一个自定义用户事件时被调用。
      */
-    fn user_event(&mut self, event_loop: &ActiveEventLoop, _event: ()) {
+    fn user_event(&mut self, event_loop: &ActiveEventLoop, event: Box<dyn CustomEvent>) {
+        loop_event_run(event_loop);
+        // 调用事件的 run 方法
+        event.run();
         println!("user_event: {:?}", event_loop);
     }
 
@@ -180,6 +220,13 @@ impl ApplicationHandler for App {
      */
     fn about_to_wait(&mut self, event_loop: &ActiveEventLoop) {
         println!("about_to_wait: {:?}", event_loop);
+        // 使用存储的代理发送事件
+        // if let Some(ref proxy) = self.proxy {
+        //     proxy.send_event(Box::new(TestApp::new())).unwrap();
+        // }else{
+        //     println!("about_to_wait: {:?} - proxy is None", event_loop);
+        // }
+        // thread::sleep(Duration::from_secs(10));
     }
 
     /**
