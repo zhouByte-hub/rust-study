@@ -1,9 +1,9 @@
 pub mod bytes_demo;
 pub mod ctrlc_demo;
 pub mod locale;
+pub mod lru_demo;
 pub mod mac_address_demo;
 pub mod num_cpus_demo;
 pub mod os_info_demo;
 pub mod rdev_demo;
 pub mod shutdown;
-pub mod lru_demo;

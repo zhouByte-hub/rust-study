@@ -1,6 +1,6 @@
 /**
  * strfmt = "0.2.5"
- * 
+ *
  * 用于格式化动态字符串的 rust 库
  */
 #[cfg(test)]
@@ -8,7 +8,6 @@ mod string_format_test {
     use std::collections::HashMap;
 
     use strfmt::strfmt;
-
 
     #[test]
     fn test() {
@@ -19,7 +18,7 @@ mod string_format_test {
 
         let value = "name: {name}, age: {age}, address: {address}".to_string();
         let formatted = strfmt(&value, &vars).unwrap();
-    
+
         println!("{}", formatted);
     }
 }

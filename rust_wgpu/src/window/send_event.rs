@@ -1,22 +1,19 @@
-
-
 use std::fmt::Debug;
 
 pub trait CustomEvent: Debug {
     fn run(&self);
 }
- 
+
 #[allow(dead_code)]
 #[derive(Debug)]
-pub struct TestApp {
-}
+pub struct TestApp {}
 
 #[allow(dead_code)]
 impl TestApp {
     pub fn new() -> Self {
-        Self { }
+        Self {}
     }
- 
+
     // 模拟鼠标点击
     fn simulate_click(&self, x: f64, y: f64) {
         println!("simulate_click({}, {})", x, y);

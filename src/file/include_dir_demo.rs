@@ -29,8 +29,7 @@ mod include_test {
     }
 
     #[cfg(target_os = "macos")]
-    static SERIALIZE_DIR: Dir =
-        include_dir!("src/serialize");
+    static SERIALIZE_DIR: Dir = include_dir!("src/serialize");
 
     #[cfg(target_os = "windows")]
     static SERIALIZE_DIR: Dir = include_dir!("E:\\project\\rust\\rust-study\\src\\serialize");

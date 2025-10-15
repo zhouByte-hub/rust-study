@@ -1,11 +1,16 @@
-use winit::{event_loop::{ActiveEventLoop, ControlFlow, DeviceEvents}, window::WindowAttributes};
+use winit::{
+    event_loop::{ActiveEventLoop, ControlFlow, DeviceEvents},
+    window::WindowAttributes,
+};
 
-pub fn loop_event_run(event_loop: &ActiveEventLoop){
+pub fn loop_event_run(event_loop: &ActiveEventLoop) {
     create_window(event_loop);
     monitors(event_loop);
     theme(event_loop);
     listen_drive(event_loop);
-    set_control(event_loop);
+
+    // 这个方法中调用 exit 方法退出事件循环
+    // set_control(event_loop);
 }
 
 /**
@@ -61,7 +66,8 @@ fn listen_drive(event_loop: &ActiveEventLoop) {
 /**
  * 事件循环的控制流
  */
-fn set_control(event_loop: &ActiveEventLoop){
+#[allow(dead_code)]
+fn set_control(event_loop: &ActiveEventLoop) {
     // 设置事件循环的控制流为 Poll
     event_loop.set_control_flow(ControlFlow::Poll);
 

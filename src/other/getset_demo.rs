@@ -1,16 +1,15 @@
 /**
  * getset = "0.1.6"
- * 
+ *
  * 用于生成字段最基本的 getter 和 setter 的程序宏。
  */
 #[allow(dead_code)]
 #[cfg(test)]
-mod getset_test{
-    use getset::{Getters, Setters, WithSetters, MutGetters, CopyGetters, CloneGetters};
-
+mod getset_test {
+    use getset::{CloneGetters, CopyGetters, Getters, MutGetters, Setters, WithSetters};
 
     #[derive(Getters, Setters, WithSetters, MutGetters, CopyGetters, CloneGetters, Default)]
-    struct User{
+    struct User {
         #[getset(get, set, get_mut, set_with)]
         username: String,
 
@@ -21,9 +20,8 @@ mod getset_test{
         address: String,
     }
 
-
     fn test() {
-        let mut user = User{
+        let mut user = User {
             username: "zhangsan".to_string(),
             age: 12,
             address: "beijing".to_string(),
