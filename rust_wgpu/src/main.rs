@@ -1,8 +1,11 @@
 pub(crate) mod common;
-pub(crate) mod window;
 pub(crate) mod ui;
+pub(crate) mod window;
 
-use crate::window::{init::App, send_event::CustomEvent};
+use crate::{
+    common::wgpu_test::WgpuApp,
+    window::{send_event::CustomEvent},
+};
 use winit::event_loop::{ControlFlow, EventLoop};
 
 fn main() {
@@ -19,9 +22,10 @@ fn main() {
     event_loop.set_control_flow(ControlFlow::Wait);
     // event_loop.set_control_flow(ControlFlow::WaitUntil(Instant::now() + Duration::from_millis(1000)));
 
-    let mut app = App::default();
+    // let mut app = App::default();
+    let mut app = WgpuApp::new(&event_loop);
     // 初始化事件循环代理
-    app.init_proxy(event_loop.create_proxy());
+    // app.init_proxy(event_loop.create_proxy());
     // 在主线程上运行事件循环的应用程序
     event_loop.run_app(&mut app).unwrap();
 }
