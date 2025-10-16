@@ -23,7 +23,7 @@ fn main() {
     // event_loop.set_control_flow(ControlFlow::WaitUntil(Instant::now() + Duration::from_millis(1000)));
 
     // let mut app = App::default();
-    let mut app = WgpuApp::new(&event_loop);
+    let mut app = WgpuApp::default();
     // 初始化事件循环代理
     // app.init_proxy(event_loop.create_proxy());
     // 在主线程上运行事件循环的应用程序

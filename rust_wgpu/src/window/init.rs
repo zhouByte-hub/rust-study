@@ -11,6 +11,7 @@ use crate::window::send_event::{CustomEvent, TestApp};
  * 定义一个结构体用来存放窗口对象以及其他公共对象
  */
 #[derive(Default)]
+#[allow(dead_code)]
 pub struct App {
     window: Option<Window>,
     proxy: Option<EventLoopProxy<Box<dyn CustomEvent>>>,
@@ -20,6 +21,7 @@ impl App {
     /**
      * 初始化事件循环代理
      */
+    #[allow(dead_code)]
     pub fn init_proxy(&mut self, proxy: EventLoopProxy<Box<dyn CustomEvent>>) {
         self.proxy = Some(proxy);
     }

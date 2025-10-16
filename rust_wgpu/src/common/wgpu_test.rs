@@ -4,7 +4,6 @@ use wgpu::{
     Device, InstanceDescriptor, PowerPreference, Queue, RequestAdapterOptions, Surface,
     SurfaceConfiguration,
 };
-use winit::event_loop::EventLoop;
 use winit::window::Theme;
 use winit::{
     application::ApplicationHandler,
@@ -13,48 +12,48 @@ use winit::{
 };
 
 #[allow(dead_code)]
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct WgpuApp {
-    window: Arc<Window>,
-    surface: Surface<'static>,
-    device: Device,
-    queue: Queue,
-    config: SurfaceConfiguration,
+    window: Option<Arc<Window>>,
+    surface: Option<Surface<'static>>,
+    device: Option<Device>,
+    queue: Option<Queue>,
+    config: Option<SurfaceConfiguration>,
     size: PhysicalSize<u32>,
     size_change: bool,
 }
 
 
-impl WgpuApp {
-    
-    pub fn new(event_loop: &EventLoop<Box<dyn CustomEvent>>) -> Self {
+
+impl ApplicationHandler<Box<dyn CustomEvent>> for WgpuApp {
+    fn resumed(&mut self, event_loop: &winit::event_loop::ActiveEventLoop) {
         let window_with = 800;
         let window_height = 600;
-        // // 通过获取主屏幕来让窗口居中显示
-        // let (x, y) = {
-        // let primary_monitor = event_loop.primary_monitor().unwrap();
-        // let monitor_size = primary_monitor.size();
-        // (
-        //     (monitor_size.width / 2 - window_with / 2) as i32,
-        //     (monitor_size.height / 2 - window_height / 2) as i32,
-        // )
-        // };
+        // 通过获取主屏幕来让窗口居中显示
+        let (x, y) = {
+            let primary_monitor = event_loop.primary_monitor().unwrap();
+            let monitor_size = primary_monitor.size();
+            (
+                (monitor_size.width / 2 - window_with / 2) as i32,
+                (monitor_size.height / 2 - window_height / 2) as i32,
+            )
+        };
         let attributes = Window::default_attributes()
             //设置窗口标题
             .with_title("RUST-STUDY:WGPU:WINIT")
             //设置窗口主题为暗色
             .with_theme(Some(Theme::Dark))
-            .with_position(Position::Physical(PhysicalPosition::new(500, 500)))
+            .with_position(Position::Physical(PhysicalPosition::new(x, y)))
             //设置窗口初始大小
             .with_inner_size(LogicalSize::new(window_with, window_height));
-        let window = Arc::new(event_loop.create_window(attributes).unwrap());
+        self.window = Some(Arc::new(event_loop.create_window(attributes).unwrap()));
 
         let instance = wgpu::Instance::new(&InstanceDescriptor {
             backends: wgpu::Backends::all(),
             ..Default::default()
         });
 
-        let surface = instance.create_surface(window.clone()).unwrap();
+        self.surface = Some(instance.create_surface(self.window.as_ref().unwrap().clone()).unwrap());   
 
         // 使用 pollster 来在同步上下文中执行异步操作
         // 请求适配器，适配器代表一个物理GPU设备
@@ -62,7 +61,7 @@ impl WgpuApp {
             // 电源偏好设置：默认值，平衡性能和功耗
             power_preference: PowerPreference::default(),
             // 指定与此适配器兼容的surface，确保适配器支持我们的渲染目标
-            compatible_surface: Some(&surface),
+            compatible_surface: Some(self.surface.as_ref().unwrap()),
             // 是否强制使用回退适配器（软件渲染），false表示优先使用硬件加速
             force_fallback_adapter: false,
         }))
@@ -96,12 +95,12 @@ impl WgpuApp {
         // }).unwrap();
 
         // 配置surface
-        // Surface配置定义了渲染目标的属性和行为
+        // Surface配置定义了渲染目标的属性和行为，需要确保 SurfaceTexture 的宽高不能为 0，这会导致你的应用程序崩溃。
         let config = wgpu::SurfaceConfiguration {
             // 纹理用途：RENDER_ATTACHMENT表示此surface将用作渲染目标
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             // 表面格式：从适配器支持的格式中选择第一个，通常是RGBA8或BGRA8
-            format: surface.get_capabilities(&adapter).formats[0],
+            format: self.surface.as_ref().unwrap().get_capabilities(&adapter).formats[0],
             // 表面宽度（像素）
             width: window_with,
             // 表面高度（像素）
@@ -116,23 +115,13 @@ impl WgpuApp {
             desired_maximum_frame_latency: 2,
         };
 
-        surface.configure(&device, &config);
+        self.surface.as_ref().unwrap().configure(&device, &config);
 
-        Self {
-            window,
-            surface,
-            device,
-            queue,
-            config,
-            size: PhysicalSize::new(window_with, window_height),
-            size_change: true,
-        }
-    }
-}
-
-impl ApplicationHandler<Box<dyn CustomEvent>> for WgpuApp {
-    fn resumed(&mut self, event_loop: &winit::event_loop::ActiveEventLoop) {
-        println!("{:?}", event_loop);
+        self.device = Some(device);
+        self.queue = Some(queue);
+        self.config = Some(config);
+        self.size = PhysicalSize::new(window_with, window_height);
+        self.size_change = true;
     }
 
     fn window_event(
