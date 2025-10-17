@@ -1,6 +1,6 @@
 
 // 基本数据类型
-const a: i32 = 10;
+var<private> a: i32 = 10;
 const b = mat2x2(1,2,3,4);
 
 @vertex
