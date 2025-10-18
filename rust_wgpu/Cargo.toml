@@ -7,8 +7,9 @@ edition = "2024"
 wgpu = "27.0"
 winit = "0.30.12"
 
+## floem 集成了 wgpu 和 winit，所以对于依赖只需要引入 floem 依赖就可以了
 # Floem 支持 Windows、macOS 和 Linux，并使用 wgpu 进行渲染。如果 GPU 不可用，则将使用由 tiny-skia 驱动的 CPU 渲染器。
-floem = "0.2.0"
+floem = {version = "0.2.0"}
 
 image = "0.25.8"
 pollster = "0.4.0"

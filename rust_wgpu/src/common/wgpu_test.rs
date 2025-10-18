@@ -3,9 +3,11 @@ use image::ImageReader;
 use std::sync::Arc;
 use wgpu::wgt::{SamplerDescriptor, TextureDescriptor};
 use wgpu::{
-    AddressMode, Device, Extent3d, InstanceDescriptor, Operations, PowerPreference, Queue,
-    RenderPassColorAttachment, RenderPassDescriptor, RequestAdapterOptions, Surface,
-    SurfaceConfiguration, TexelCopyBufferLayout, TexelCopyTextureInfo, TextureViewDescriptor,
+    AddressMode, BindGroupDescriptor, BindGroupEntry, BindGroupLayoutDescriptor,
+    BindGroupLayoutEntry, BindingResource, BindingType, Device, Extent3d, InstanceDescriptor,
+    Operations, PowerPreference, Queue, RenderPassColorAttachment, RenderPassDescriptor,
+    RequestAdapterOptions, ShaderStages, Surface, SurfaceConfiguration, TexelCopyBufferLayout,
+    TexelCopyTextureInfo, TextureViewDescriptor,
 };
 
 use winit::event::WindowEvent;
@@ -260,5 +262,41 @@ fn render_images(device: &Device, queue: &Queue) {
         min_filter: wgpu::FilterMode::Nearest,
         mipmap_filter: wgpu::FilterMode::Nearest,
         ..Default::default()
+    });
+
+    let texture_bind_group_layout = device.create_bind_group_layout(&BindGroupLayoutDescriptor {
+        entries: &[
+            BindGroupLayoutEntry {
+                binding: 0,
+                visibility: ShaderStages::FRAGMENT,
+                ty: BindingType::Texture {
+                    sample_type: wgpu::TextureSampleType::Float { filterable: true },
+                    view_dimension: wgpu::TextureViewDimension::D2,
+                    multisampled: false,
+                },
+                count: None,
+            },
+            BindGroupLayoutEntry {
+                binding: 1,
+                visibility: ShaderStages::FRAGMENT,
+                ty: BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
+                count: None,
+            },
+        ],
+        label: Some("diffuse_sampler"),
+    });
+    let _diffuse_bind_group = device.create_bind_group(&BindGroupDescriptor {
+        layout: &texture_bind_group_layout,
+        entries: &[
+            BindGroupEntry {
+                binding: 0,
+                resource: BindingResource::TextureView(&view),
+            },
+            BindGroupEntry {
+                binding: 1,
+                resource: BindingResource::Sampler(&diffuse_sampler),
+            },
+        ],
+        label: Some("diffuse_bind_group"),
     });
 }
