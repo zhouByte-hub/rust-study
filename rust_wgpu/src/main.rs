@@ -2,10 +2,7 @@ pub(crate) mod common;
 pub(crate) mod ui;
 pub(crate) mod window;
 
-use crate::{
-    common::wgpu_test::WgpuApp,
-    window::{send_event::CustomEvent},
-};
+use crate::{common::wgpu_test::WgpuApp, window::send_event::CustomEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
 
 fn main() {

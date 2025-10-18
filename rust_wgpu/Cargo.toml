@@ -9,15 +9,18 @@ winit = "0.30.12"
 
 # Floem 支持 Windows、macOS 和 Linux，并使用 wgpu 进行渲染。如果 GPU 不可用，则将使用由 tiny-skia 驱动的 CPU 渲染器。
 floem = "0.2.0"
+
+image = "0.25.8"
+pollster = "0.4.0"
+
 # 一个简单的库，用于根据时间运行可中断的、基于过渡的动画。
-lilt = "0.8.1"
+# lilt = "0.8.1"
 
 # 为 wgpu 提供快速、简单的 2D 文本渲染
-glyphon = "0.9.0"
+# glyphon = "0.9.0"
 
 # Rusty File Dialogs 是一个跨平台的 Rust 库，用于使用原生文件打开/保存对话框
-rfd = "0.15.4"
+# rfd = "0.15.4"
 
 # 添加 termcolor 依赖以解决rfd编译错误
-termcolor = "1.4"
-pollster = "0.4.0"
+# termcolor = "1.4"
