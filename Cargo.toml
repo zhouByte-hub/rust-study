@@ -6,7 +6,7 @@ description = "rust-study"
 
 [workspace]
 name = "rust-study"
-members = ["rust_basic", "rust_async", "rust_net", "rust_actix", "rust_mcp/clients", "rust_mcp/servers", "rust_wgpu"]
+members = ["rust_basic", "rust_async", "rust_net", "rust_actix", "rust_mcp/clients", "rust_mcp/servers", "rust_wgpu", "rust_slint"]
 
 
 #[[bin]]

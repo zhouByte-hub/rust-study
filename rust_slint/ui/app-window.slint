@@ -1,0 +1,43 @@
+import { Button, VerticalBox } from "std-widgets.slint";
+
+// 要使 Slint 文件有效，其根元素必须是一个组件。然后，您可以在组件内部声明任意数量的元素。
+export component AppWindow inherits Window {
+    /* 声明属性的语法：property <type> <name>[: <default-value>];
+        private：该属性只能在组件内部访问，不能在外部访问。这是默认行为。
+        property：该属性可以在组件内部和外部访问。
+        in：该属性是一个输入属性，它可以由组件的调用者设置和修改，组件可以提供默认值，但是不能赋值给他。
+        out：输出属性，对于组件来说他是只读的。
+        in-out：该属性可以被所有人读取和修改。
+    */
+    title: "Rust Slint Example";
+    background: yellow;
+    in-out property <int> counter: 42;
+    // property <int> prop: 0;
+    callback request-increase-value();
+    
+    // 当 prop 属性变化时触发
+    // changed prop => {
+
+    //     root.counter += 1;
+    // }
+    
+    /*
+        VerticalBox 相当于一个垂直的容器，它会自动垂直排列子元素。
+        容器会根据子元素的大小自动调整
+    */
+    VerticalBox {
+        spacing: 10px;
+        Text {
+            text: "Counter: \{root.counter}";
+            color: white;
+            height: 100px;
+        }
+
+        Button {
+            text: "Increase value";
+            clicked => {
+                root.request-increase-value();
+            };
+        }
+    }
+}
