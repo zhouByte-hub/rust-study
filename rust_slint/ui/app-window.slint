@@ -1,5 +1,10 @@
 import { Button, VerticalBox } from "std-widgets.slint";
 
+component MyButton inherits Button {
+    
+}
+
+
 // 要使 Slint 文件有效，其根元素必须是一个组件。然后，您可以在组件内部声明任意数量的元素。
 export component AppWindow inherits Window {
     /* 声明属性的语法：property <type> <name>[: <default-value>];
@@ -39,5 +44,7 @@ export component AppWindow inherits Window {
                 root.request-increase-value();
             };
         }
+        MyButton {}
     }
 }
+
