@@ -1,4 +1,4 @@
-import { Button, VerticalBox } from "std-widgets.slint";
+import { Button, VerticalBox, CheckBox, ComboBox, GridBox, ListView, StandardListView, Slider } from "std-widgets.slint";
 
 component MyButton inherits Button {
     callback clieckShow();
@@ -30,6 +30,9 @@ export component AppWindow inherits Window {
     in-out property <int> counter: 42;
     // property <int> prop: 0;
     callback request-increase-value();
+    icon: @image-url("../kafka.png");
+    width: 800px;
+    height: 800px;
     
     // 当 prop 属性变化时触发
     // changed prop => {
@@ -43,17 +46,73 @@ export component AppWindow inherits Window {
     */
     VerticalBox {
         spacing: 10px;
+        padding: 0px;
         Text {
             text: "Counter: \{root.counter}";
             color: white;
             height: 100px;
         }
+        Image {
+            source: @image-url("../kafka.png");
+            width: 50px;
+            height: 50px;
+        }
+        // 复选框
+        CheckBox {
+            text: "Male";
+        }
+        CheckBox {
+            text: "Female";
+        }
+        // 下拉框
+        ComboBox { 
+            width: 200px;
+            height: 50px;
+            current-index: 1;
+            current-value: "坤坤";
+            model: ["篮球","唱","跳","Rap"];
+        }
 
         Button {
             text: "Increase value";
+            primary: true;
+            width: 200px;
+            height: 50px;
             clicked => {
                 root.request-increase-value();
             };
+        }
+        GridBox { 
+            spacing: 2px;
+            Rectangle {background: red;height: 30px;width: 30px;}
+            Rectangle {background: yellow;height: 30px;width: 30px;}
+            Rectangle {background: green;height: 30px;width: 30px;}
+        }
+        ListView { 
+            for color in [
+            #000,
+            #ddd,
+            #ba5858
+            ]: Rectangle {
+            height: 30px;
+            width: 30px;
+            background: color;
+            }
+        }
+        StandardListView { 
+            current-item: 1;
+            model: [
+            {text:"1"},
+            {text:"2"},
+            {text:"3"},
+            {text:"4"}
+            ];
+        }
+        Slider { 
+            value: 30;
+            minimum: 0;
+            maximum: 100;
+            width: 100px;
         }
         MyButton {
             text: "Show";
@@ -64,5 +123,6 @@ export component AppWindow inherits Window {
             }
         }
     }
+
 }
 
