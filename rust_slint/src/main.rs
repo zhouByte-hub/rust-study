@@ -3,6 +3,7 @@
 
 use std::error::Error;
 
+use display_info::DisplayInfo;
 use slint::{PhysicalPosition, PhysicalSize, WindowPosition, WindowSize};
 
 slint::include_modules!();
@@ -16,17 +17,18 @@ fn main() -> Result<(), Box<dyn Error>> {
     ui.window()
         .set_size(WindowSize::Physical(PhysicalSize::new(window_width as u32, window_height as u32)));
     
-    // 尝试获取屏幕尺寸并计算居中位置
-    // 使用一个常见的屏幕分辨率作为默认值，如果无法获取实际屏幕尺寸
-    let default_screen_width = 1920.0;
-    let default_screen_height = 1080.0;
+    let (x, y) = {
+        let display_info = DisplayInfo::all().unwrap();
+        let primary_display = display_info.iter().filter(|item| item.is_primary).next().unwrap();
+        (primary_display.width as f64, primary_display.height as f64)
+    };
     
     // 计算居中位置
-    let center_x = (default_screen_width - window_width) / 2.0;
-    let center_y = (default_screen_height - window_height) / 2.0;
+    let center_x = (x / 2.0 - window_width / 2.0) as i32;
+    let center_y = (y / 2.0 - window_height / 2.0) as i32;
     
     ui.window()
-        .set_position(WindowPosition::Physical(PhysicalPosition::new(center_x as i32, center_y as i32)));
+        .set_position(WindowPosition::Physical(PhysicalPosition::new(center_x, center_y)));
     
 
     ui.on_request_increase_value({
@@ -41,4 +43,20 @@ fn main() -> Result<(), Box<dyn Error>> {
     ui.run()?;
 
     Ok(())
+}
+
+
+#[cfg(test)]
+mod window_test{
+    use display_info::DisplayInfo;
+
+
+    #[test]
+    fn test(){
+        let info_list = DisplayInfo::all().unwrap();
+        for item in info_list {
+            println!("{:?}", item);
+            println!("============================")
+        }
+    }
 }

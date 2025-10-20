@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 slint = "1.12.1"
+display-info = "0.5"
 
 [build-dependencies]
 slint-build = "1.12.1"

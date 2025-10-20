@@ -1,7 +1,18 @@
 import { Button, VerticalBox } from "std-widgets.slint";
 
 component MyButton inherits Button {
-    
+    callback clieckShow();
+    clicked => {
+        self.clieckShow();
+    }
+    /*
+        private：默认修饰符，表示只有当前组件可以访问该函数。
+        public：表示该函数可以在组件外部被调用。
+        protected：表示该函数可以在组件内部和子类中被调用。
+    */
+    public function show() {
+        self.text = "Showed";
+    }
 }
 
 
@@ -44,7 +55,14 @@ export component AppWindow inherits Window {
                 root.request-increase-value();
             };
         }
-        MyButton {}
+        MyButton {
+            text: "Show";
+
+            clieckShow => {
+                // self.text = "Showed";
+                self.show();
+            }
+        }
     }
 }
 
