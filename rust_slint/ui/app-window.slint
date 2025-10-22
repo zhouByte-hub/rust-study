@@ -6,17 +6,19 @@ export component AppWindow inherits Window {
     title: "Daily To-Do";
     width: 400px;
     height: 600px;
+    background: @linear-gradient(180deg, #ffffff 0%, #d0d0d0 100%);  // 从上到下的白色到灰色渐变
 
     VerticalLayout {
         Rectangle {
             width: 100%;
             height: 150px;
-            background: #333333;
+            background: #68a8ab;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
             Calendar {
-               width: 100%;
-               height: 100%;
+                x: parent.width * 0.05;
+                y: parent.height * 0.2;
+                width: parent.width * 0.9;
             }
         }
     }

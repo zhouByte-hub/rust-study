@@ -1,17 +1,26 @@
 export component Calendar inherits Rectangle {
-
+    
     VerticalLayout {
+        spacing: 20px;  // 增加子元素之间的间距
+        
         Text {
             text: "Todo List";
             font-size: 24px;
             color: #ffffff;
+            horizontal-alignment: center;
+            vertical-alignment: center;
         }
 
         Rectangle {
-            width: parent.width * 0.7;
-            height: parent.height * 0.7;
-            background: red;
+            width: parent.width;
+            height: parent.height * 0.8;
+            background: #ffffff;
             border-radius: 20px;
+            // 阴影效果设置
+            drop-shadow-blur: 10px;        // 阴影模糊半径
+            drop-shadow-color: #00000080;  // 阴影颜色（黑色，50%透明度）
+            drop-shadow-offset-x: 2px;     // 阴影水平偏移量
+            drop-shadow-offset-y: 2px;     // 阴影垂直偏移量
         }
     }
     
