@@ -1,128 +1,151 @@
 import { Button, VerticalBox, CheckBox, ComboBox, GridBox, ListView, StandardListView, Slider } from "std-widgets.slint";
+import { Calendar } from "./components/calendar.slint";
 
-component MyButton inherits Button {
-    callback clieckShow();
-    clicked => {
-        self.clieckShow();
+
+export component AppWindow inherits Window {
+    title: "Daily To-Do";
+    width: 400px;
+    height: 600px;
+
+    VerticalLayout {
+        Rectangle {
+            width: 100%;
+            height: 150px;
+            background: #333333;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            Calendar {
+               width: 100%;
+               height: 100%;
+            }
+        }
     }
-    /*
-        private：默认修饰符，表示只有当前组件可以访问该函数。
-        public：表示该函数可以在组件外部被调用。
-        protected：表示该函数可以在组件内部和子类中被调用。
-    */
-    public function show() {
-        self.text = "Showed";
-    }
+    
 }
+
+// component MyButton inherits Button {
+//     callback clieckShow();
+//     clicked => {
+//         self.clieckShow();
+//     }
+//     /*
+//         private：默认修饰符，表示只有当前组件可以访问该函数。
+//         public：表示该函数可以在组件外部被调用。
+//         protected：表示该函数可以在组件内部和子类中被调用。
+//     */
+//     public function show() {
+//         self.text = "Showed";
+//     }
+// }
 
 
 // 要使 Slint 文件有效，其根元素必须是一个组件。然后，您可以在组件内部声明任意数量的元素。
-export component AppWindow inherits Window {
-    /* 声明属性的语法：property <type> <name>[: <default-value>];
-        private：该属性只能在组件内部访问，不能在外部访问。这是默认行为。
-        property：该属性可以在组件内部和外部访问。
-        in：该属性是一个输入属性，它可以由组件的调用者设置和修改，组件可以提供默认值，但是不能赋值给他。
-        out：输出属性，对于组件来说他是只读的。
-        in-out：该属性可以被所有人读取和修改。
-    */
-    title: "Rust Slint Example";
-    background: yellow;
-    in-out property <int> counter: 42;
-    // property <int> prop: 0;
-    callback request-increase-value();
-    icon: @image-url("../kafka.png");
-    width: 800px;
-    height: 800px;
+// export component AppWindow inherits Window {
+//     /* 声明属性的语法：property <type> <name>[: <default-value>];
+//         private：该属性只能在组件内部访问，不能在外部访问。这是默认行为。
+//         property：该属性可以在组件内部和外部访问。
+//         in：该属性是一个输入属性，它可以由组件的调用者设置和修改，组件可以提供默认值，但是不能赋值给他。
+//         out：输出属性，对于组件来说他是只读的。
+//         in-out：该属性可以被所有人读取和修改。
+//     */
+//     title: "Rust Slint Example";
+//     background: yellow;
+//     in-out property <int> counter: 42;
+//     // property <int> prop: 0;
+//     callback request-increase-value();
+//     icon: @image-url("../kafka.png");
+//     width: 800px;
+//     height: 800px;
     
-    // 当 prop 属性变化时触发
-    // changed prop => {
+//     // 当 prop 属性变化时触发
+//     // changed prop => {
 
-    //     root.counter += 1;
-    // }
+//     //     root.counter += 1;
+//     // }
     
-    /*
-        VerticalBox 相当于一个垂直的容器，它会自动垂直排列子元素。
-        容器会根据子元素的大小自动调整
-    */
-    VerticalBox {
-        spacing: 10px;
-        padding: 0px;
-        Text {
-            text: "Counter: \{root.counter}";
-            color: white;
-            height: 100px;
-        }
-        Image {
-            source: @image-url("../kafka.png");
-            width: 50px;
-            height: 50px;
-        }
-        // 复选框
-        CheckBox {
-            text: "Male";
-        }
-        CheckBox {
-            text: "Female";
-        }
-        // 下拉框
-        ComboBox { 
-            width: 200px;
-            height: 50px;
-            current-index: 1;
-            current-value: "坤坤";
-            model: ["篮球","唱","跳","Rap"];
-        }
+//     /*
+//         VerticalBox 相当于一个垂直的容器，它会自动垂直排列子元素。
+//         容器会根据子元素的大小自动调整
+//     */
+//     VerticalBox {
+//         spacing: 10px;
+//         padding: 0px;
+//         Text {
+//             text: "Counter: \{root.counter}";
+//             color: white;
+//             height: 100px;
+//         }
+//         Image {
+//             source: @image-url("../kafka.png");
+//             width: 50px;
+//             height: 50px;
+//         }
+//         // 复选框
+//         CheckBox {
+//             text: "Male";
+//         }
+//         CheckBox {
+//             text: "Female";
+//         }
+//         // 下拉框
+//         ComboBox { 
+//             width: 200px;
+//             height: 50px;
+//             current-index: 1;
+//             current-value: "坤坤";
+//             model: ["篮球","唱","跳","Rap"];
+//         }
 
-        Button {
-            text: "Increase value";
-            primary: true;
-            width: 200px;
-            height: 50px;
-            clicked => {
-                root.request-increase-value();
-            };
-        }
-        GridBox { 
-            spacing: 2px;
-            Rectangle {background: red;height: 30px;width: 30px;}
-            Rectangle {background: yellow;height: 30px;width: 30px;}
-            Rectangle {background: green;height: 30px;width: 30px;}
-        }
-        ListView { 
-            for color in [
-            #000,
-            #ddd,
-            #ba5858
-            ]: Rectangle {
-            height: 30px;
-            width: 30px;
-            background: color;
-            }
-        }
-        StandardListView { 
-            current-item: 1;
-            model: [
-            {text:"1"},
-            {text:"2"},
-            {text:"3"},
-            {text:"4"}
-            ];
-        }
-        Slider { 
-            value: 30;
-            minimum: 0;
-            maximum: 100;
-            width: 100px;
-        }
-        MyButton {
-            text: "Show";
+//         Button {
+//             text: "Increase value";
+//             primary: true;
+//             width: 200px;
+//             height: 50px;
+//             clicked => {
+//                 root.request-increase-value();
+//             };
+//         }
+//         GridBox { 
+//             spacing: 2px;
+//             Rectangle {background: red;height: 30px;width: 30px;}
+//             Rectangle {background: yellow;height: 30px;width: 30px;}
+//             Rectangle {background: green;height: 30px;width: 30px;}
+//         }
+//         ListView { 
+//             for color in [
+//             #000,
+//             #ddd,
+//             #ba5858
+//             ]: Rectangle {
+//             height: 30px;
+//             width: 30px;
+//             background: color;
+//             }
+//         }
+//         StandardListView { 
+//             current-item: 1;
+//             model: [
+//             {text:"1"},
+//             {text:"2"},
+//             {text:"3"},
+//             {text:"4"}
+//             ];
+//         }
+//         Slider { 
+//             value: 30;
+//             minimum: 0;
+//             maximum: 100;
+//             width: 100px;
+//         }
+//         MyButton {
+//             text: "Show";
 
-            clieckShow => {
-                // self.text = "Showed";
-                self.show();
-            }
-        }
-    }
+//             clieckShow => {
+//                 // self.text = "Showed";
+//                 self.show();
+//             }
+//         }
+//     }
 
-}
+// }
 

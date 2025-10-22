@@ -1,0 +1,18 @@
+export component Calendar inherits Rectangle {
+
+    VerticalLayout {
+        Text {
+            text: "Todo List";
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        Rectangle {
+            width: parent.width * 0.7;
+            height: parent.height * 0.7;
+            background: red;
+            border-radius: 20px;
+        }
+    }
+    
+}
