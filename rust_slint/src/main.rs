@@ -4,7 +4,9 @@
 use std::error::Error;
 
 use display_info::DisplayInfo;
-use slint::{PhysicalPosition, WindowPosition};
+use slint::{PhysicalPosition, WindowPosition, ComponentHandle};
+use crate::home::calendar::get_current_weekday;
+pub mod home;
 
 slint::include_modules!();
 
@@ -22,6 +24,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let center_y = (screen_height / 2.0 - 600.0 / 2.0) as i32;
     
     ui.window().set_position(WindowPosition::Physical(PhysicalPosition::new(center_x, center_y)));
+
+    // 设置Calendar组件的当前星期属性
+    ui.set_current_weekday(get_current_weekday().into());
     Ok(ui.run()?)
 }
 

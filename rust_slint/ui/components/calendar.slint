@@ -1,4 +1,58 @@
+import { Slider } from "std-widgets.slint";
+
+export component Data inherits Rectangle {
+    // 使用属性存储当前星期
+    in property <string> current-weekday: "一";
+    in property <int> complate_rate: 30;
+
+    VerticalLayout {
+        Rectangle {
+            HorizontalLayout {
+                padding: 10px;
+                alignment: space-between;
+                Text {
+                    text: "周期";
+                    font-size: 18px;
+                    color: #484848;
+                }
+                Text{
+                    text: "待办任务";
+                    font-size: 18px;
+                    color: #484848;
+                } 
+            }
+        }
+        Rectangle {
+            // 使用循环输出星期几
+            HorizontalLayout {
+                padding: 10px;
+                spacing: 15px;
+                for weekday in ["一", "二", "三", "四", "五", "六", "日"]: Text {
+                    text: weekday;
+                    font-size: weekday == root.current-weekday ? 20px :16px;
+                    color: weekday == root.current-weekday ? #ff6b6b : #727272;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                    width: 35px;
+                    height: 30px;
+                    font-weight: 800;
+                }
+            }
+        }
+        Rectangle {
+            Slider { 
+                value: root.complate_rate;
+                minimum: 0;
+                maximum: 100;
+                width: 90%;
+                enabled: false;
+            }
+        }
+    }
+}
+
 export component Calendar inherits Rectangle {
+    in property <string> current-weekday: "一";
     
     VerticalLayout {
         spacing: 20px;  // 增加子元素之间的间距
@@ -17,10 +71,14 @@ export component Calendar inherits Rectangle {
             background: #ffffff;
             border-radius: 20px;
             // 阴影效果设置
-            drop-shadow-blur: 10px;        // 阴影模糊半径
-            drop-shadow-color: #00000080;  // 阴影颜色（黑色，50%透明度）
-            drop-shadow-offset-x: 2px;     // 阴影水平偏移量
-            drop-shadow-offset-y: 2px;     // 阴影垂直偏移量
+            drop-shadow-blur: 8px;        // 阴影模糊半径
+            drop-shadow-color: #e1e1e1;  // 阴影颜色（黑色，50%透明度）
+            drop-shadow-offset-x: 1px;     // 阴影水平偏移量
+            drop-shadow-offset-y: 1px;     // 阴影垂直偏移量
+
+            Data {
+                current-weekday: root.current-weekday;
+            }
         }
     }
     

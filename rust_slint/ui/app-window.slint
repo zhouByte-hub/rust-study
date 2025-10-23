@@ -6,7 +6,10 @@ export component AppWindow inherits Window {
     title: "Daily To-Do";
     width: 400px;
     height: 600px;
-    background: @linear-gradient(180deg, #ffffff 0%, #d0d0d0 100%);  // 从上到下的白色到灰色渐变
+    background: @linear-gradient(180deg,#f2f2f2 0%, #ffffff 100%);  // 从上到下的白色到灰色渐变
+    
+    // 暴露Calendar组件的current-weekday属性
+    in property <string> current-weekday;
 
     VerticalLayout {
         Rectangle {
@@ -15,14 +18,14 @@ export component AppWindow inherits Window {
             background: #68a8ab;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
-            Calendar {
+            calendar := Calendar {
                 x: parent.width * 0.05;
                 y: parent.height * 0.2;
                 width: parent.width * 0.9;
+                current-weekday: root.current-weekday;
             }
         }
     }
-    
 }
 
 // component MyButton inherits Button {
