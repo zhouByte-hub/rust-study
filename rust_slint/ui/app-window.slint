@@ -1,6 +1,8 @@
 import { Button, VerticalBox, CheckBox, ComboBox, GridBox, ListView, StandardListView, Slider } from "std-widgets.slint";
 import { Calendar } from "./components/calendar.slint";
 import { Separate } from "./components/separate.slint";
+import { TodoList } from "./components/todoList.slint";
+import { Tarbbar } from "./components/tarbbar.slint";
 
 
 export component AppWindow inherits Window {
@@ -13,6 +15,7 @@ export component AppWindow inherits Window {
     in property <string> current-weekday;
 
     VerticalLayout {
+        spacing: 20px;
         VerticalLayout {
             spacing: 55px;
             Rectangle {
@@ -32,7 +35,14 @@ export component AppWindow inherits Window {
                 width: 100%;
             }
         }
-        
+        TodoList {
+        }
+    }
+    
+    Tarbbar {
+        y: (parent.height - self.height);
+        height: 40px;
+        width: parent.width;
     }
 }
 
