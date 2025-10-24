@@ -1,11 +1,10 @@
 use chrono::{Datelike, Local};
 
-
 // 获取当前星期
 pub fn get_current_weekday() -> String {
     let now = Local::now();
     let weekday = now.weekday();
-    
+
     // 将星期转换为中文显示
     match weekday {
         chrono::Weekday::Mon => "一".to_string(),

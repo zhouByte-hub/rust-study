@@ -1,0 +1,46 @@
+
+export component Separate {
+    Rectangle {
+            width: 100%;
+            HorizontalLayout {
+                padding-left: 20px;
+                padding-right: 20px;
+                spacing: 10px;
+                alignment: center;
+                
+                // 左翅膀
+                Image {
+                    source: @image-url("../static/tags.png");
+                    width: 50px;
+                    height: 50px;
+                    source-clip-x: 0;        // 从左边开始
+                    source-clip-y: 0;        // 从顶部开始
+                    source-clip-width: 262;  // 左翅膀宽度（图片宽度的一半）
+                    source-clip-height: 310; // 完整高度
+                    image-fit: contain;
+                    vertical-alignment: center;
+                }
+                
+                Text {
+                    text: "任务列表";
+                    font-size: 24px;
+                    color: #000000;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+                
+                // 右翅膀
+                Image {
+                    source: @image-url("../static/tags.png");
+                    width: 50px;
+                    height: 50px;
+                    source-clip-x: 262;      // 从中间开始（右翅膀）
+                    source-clip-y: 0;        // 从顶部开始
+                    source-clip-width: 263;  // 右翅膀宽度（图片宽度的一半）
+                    source-clip-height: 310; // 完整高度
+                    image-fit: contain;
+                    vertical-alignment: center;
+                }
+            }
+        }
+}
