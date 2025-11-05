@@ -1,32 +1,71 @@
+import {Logic} from "../global/logic.slint";
+import { Button } from "std-widgets.slint";
 
 export component TodoList {
+
+    /** 双向绑定的意义
+        多个地方使用 ：当一个回调需要在组件内多个地方使用时。
+        可能需要替换实现 ：当组件可能需要在不同情况下使用不同的实现时。
+        组件封装 ：当需要隐藏全局组件的具体实现细节时
+        复杂计算逻辑 ：当需要在本地回调中添加额外的逻辑时
+    */
+    pure callback abc <=> Logic.magic_operation;
+    pure function callAbc(count: int) -> int{
+        return abc(count);
+    }
+
+    // 创建复杂类型的属性 
+    property <[{key: string, value: string}]> data;
     
     HorizontalLayout {
         alignment: center;
         
         VerticalLayout {
             spacing: 10px;
-            Rectangle {
-                width: root.width * 0.9;
-                height: 80px;
-                background: #ffffff;
-                border-radius: 5px;
-                drop-shadow-blur: 10px;
-                drop-shadow-color: #9c9c9c;
-                drop-shadow-offset-x: 0px;
-                drop-shadow-offset-y: 0px;
-            }
 
-            Rectangle {
-                width: root.width * 0.9;
-                height: 80px;
-                background: #ffffff;
-                border-radius: 5px;
-                drop-shadow-blur: 10px;
-                drop-shadow-color: #9c9c9c;
-                drop-shadow-offset-x: 0px;
-                drop-shadow-offset-y: 0px;
-            }
+            for item in [1, 2, 3]: 
+                Rectangle {
+                    width: root.width * 0.9;
+                    height: 80px;
+                    background: #ffffff;
+                    border-radius: 5px;
+                    drop-shadow-blur: 10px;
+                    drop-shadow-color: #9c9c9c;
+                    drop-shadow-offset-x: 0px;
+                    drop-shadow-offset-y: 0px;
+                    VerticalLayout {
+                        spacing: 10px;
+                        content := Text {
+                            text: Logic.count;
+                            color: #000000;
+                        }
+                        Button {
+                            width: 80px;
+                            height: parent.height * 0.3;
+                            text: "+";
+                            clicked => {
+                            if(content.color == #000000) {
+                                content.color = #f40909;
+                            } else {
+                                content.color = #000000;
+                            }
+                                Logic.count = callAbc(Logic.count);
+                            }
+                        }
+                    }
+                    
+                }
+
+            // Rectangle {
+            //     width: root.width * 0.9;
+            //     height: 80px;
+            //     background: #ffffff;
+            //     border-radius: 5px;
+            //     drop-shadow-blur: 10px;
+            //     drop-shadow-color: #9c9c9c;
+            //     drop-shadow-offset-x: 0px;
+            //     drop-shadow-offset-y: 0px;
+            // }
         }
     }
 

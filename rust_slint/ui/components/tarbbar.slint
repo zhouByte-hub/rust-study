@@ -1,4 +1,4 @@
-
+import {Logic} from "../global/logic.slint";
 import { Button } from "std-widgets.slint";
 export component Tarbbar {
 
@@ -11,6 +11,9 @@ export component Tarbbar {
             width: 80px;
             height: parent.height - 20px;
             text: "+";
+            clicked => {
+                Logic.count = Logic.magic_operation(Logic.count);
+            }
         }
     }
     

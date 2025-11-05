@@ -1,0 +1,19 @@
+import {User, Sex} from "./user.slint";
+
+export global Logic {
+    in-out property <int> count: 10;
+    pure callback magic_operation(count: int) -> int;
+}
+
+
+export global A {
+    in-out property <User> user: {
+        user: "张三",
+        age: 18,
+        sex: false,
+        money: 100.0,
+        address: #000000,
+        b: #000000,
+        c: Sex.Man
+    };
+}
