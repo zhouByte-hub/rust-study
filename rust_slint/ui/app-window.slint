@@ -1,8 +1,8 @@
-// import { Button, VerticalBox, CheckBox, ComboBox, GridBox, ListView, StandardListView, Slider } from "std-widgets.slint";
-// import { Calendar } from "./components/calendar.slint";
-// import { Separate } from "./components/separate.slint";
-// import { TodoList } from "./components/todoList.slint";
-// import { Tarbbar } from "./components/tarbbar.slint";
+import { Button, VerticalBox, CheckBox, ComboBox, GridBox, ListView, StandardListView, Slider } from "std-widgets.slint";
+import { Calendar } from "./components/calendar.slint";
+import { Separate } from "./components/separate.slint";
+import { TodoList } from "./components/todoList.slint";
+import { Tarbbar } from "./components/tarbbar.slint";
 
 import {Logic, A} from "./global/logic.slint";
 import {User, Sex} from "./global/user.slint";
@@ -14,136 +14,136 @@ import {
     ActionChip,Dialog,DropDownMenu
 } from "./material-1.0/material.slint";
 
+// export component AppWindow inherits Window {
+//     width: 400px;
+//     background: transparent;
+//     VerticalLayout {
+//         spacing: 20px;
+//         // 顶部栏
+//         AppBar {
+//             title: "My App";
+//             width: parent.width;
+//             height: 50px;
+//         }
+//         // 底部栏
+//         BottomAppBar {
+//             width: parent.width;
+//             height: 80px;
+//             icon-buttons: [
+//                 { icon: @image-url("../icons/share.svg"), tooltip: "Home", enabled: true },
+//                 { icon: @image-url("../icons/search.svg"), tooltip: "Search", enabled: true }
+//             ];
+//             fab-icon: @image-url("../icons/add.svg");
+//         }
+//         LargeAppBar {
+//             title: "My App";
+//             width: parent.width;
+//             height: 50px;
+//         }
+//         // 搜索栏
+//         SearchBar {
+//             placeholder-text: "Search...";
+//             width: 280px;
+//             height: 56px;
+//         }
+//         FilledButton {
+//             text: "Click me";
+//             width: 120px;
+//             height: 40px;
+//         }
+//         ElevatedCard {
+//             width: 200px;
+//             height: 150px;
+//             clickable: true;
+//             Text {
+//                 text: "Elevated Card";
+//             }
+//         }
+//         CheckBox {
+//             check-state: CheckState.checked;
+//         }
+//         CheckBoxTile {
+//             text: "Option 1";
+//             check-state: CheckState.checked;
+//         }
+//         ActionChip {
+//             text: "Action";
+//             icon: @image-url("../icons/add.svg");
+//             width: 100px;
+//             height: 32px;
+//         }
+//         Dialog {
+//             title: "Confirm Action";
+//             default-action-text: "OK";
+//             actions: ["Cancel"];
+//         }
+//         DropDownMenu {
+//             width: 280px;
+//             height: 50px;
+//             items: [
+//             { text: "Copy" },
+//             { text: "Cut" },
+//             { text: "Paste" },
+//             ];
+//         }
+//     }
+// }
+
 export component AppWindow inherits Window {
+    title: "Daily To-Do";
     width: 400px;
-    background: transparent;
+    height: 700px;
+    background: @linear-gradient(180deg,#f2f2f2 0%, #ffffff 100%);  // 从上到下的白色到灰色渐变
+    
+    // 暴露Calendar组件的current-weekday属性
+    in property <string> current-weekday;
+
     VerticalLayout {
         spacing: 20px;
-        // 顶部栏
-        AppBar {
-            title: "My App";
-            width: parent.width;
-            height: 50px;
-        }
-        // 底部栏
-        BottomAppBar {
-            width: parent.width;
-            height: 80px;
-            icon-buttons: [
-                { icon: @image-url("../icons/share.svg"), tooltip: "Home", enabled: true },
-                { icon: @image-url("../icons/search.svg"), tooltip: "Search", enabled: true }
-            ];
-            fab-icon: @image-url("../icons/add.svg");
-        }
-        LargeAppBar {
-            title: "My App";
-            width: parent.width;
-            height: 50px;
-        }
-        // 搜索栏
-        SearchBar {
-            placeholder-text: "Search...";
-            width: 280px;
-            height: 56px;
-        }
-        FilledButton {
-            text: "Click me";
-            width: 120px;
-            height: 40px;
-        }
-        ElevatedCard {
-            width: 200px;
-            height: 150px;
-            clickable: true;
-            Text {
-                text: "Elevated Card";
+        VerticalLayout {
+            spacing: 55px;
+            Rectangle {
+                width: 100%;
+                height: 150px;
+                background: #68a8ab;
+                border-bottom-left-radius: 20px;
+                border-bottom-right-radius: 20px;
+                calendar := Calendar {
+                    x: parent.width * 0.05;
+                    y: parent.height * 0.2;
+                    width: parent.width * 0.9;
+                    current-weekday: root.current-weekday;
+                }
+            }
+            Separate {
+                width: 100%;
             }
         }
-        CheckBox {
-            check-state: CheckState.checked;
+        TodoList {
         }
-        CheckBoxTile {
-            text: "Option 1";
-            check-state: CheckState.checked;
-        }
-        ActionChip {
-            text: "Action";
-            icon: @image-url("../icons/add.svg");
-            width: 100px;
-            height: 32px;
-        }
-        Dialog {
-            title: "Confirm Action";
-            default-action-text: "OK";
-            actions: ["Cancel"];
-        }
-        DropDownMenu {
-            width: 280px;
-            height: 50px;
-            items: [
-            { text: "Copy" },
-            { text: "Cut" },
-            { text: "Paste" },
-            ];
-        }
+    }
+    
+    Tarbbar {
+        y: (parent.height - self.height);
+        height: 40px;
+        width: parent.width;
     }
 }
 
-// export component AppWindow inherits Window {
-//     title: "Daily To-Do";
-//     width: 400px;
-//     height: 700px;
-//     background: @linear-gradient(180deg,#f2f2f2 0%, #ffffff 100%);  // 从上到下的白色到灰色渐变
-    
-//     // 暴露Calendar组件的current-weekday属性
-//     in property <string> current-weekday;
-
-//     VerticalLayout {
-//         spacing: 20px;
-//         VerticalLayout {
-//             spacing: 55px;
-//             Rectangle {
-//                 width: 100%;
-//                 height: 150px;
-//                 background: #68a8ab;
-//                 border-bottom-left-radius: 20px;
-//                 border-bottom-right-radius: 20px;
-//                 calendar := Calendar {
-//                     x: parent.width * 0.05;
-//                     y: parent.height * 0.2;
-//                     width: parent.width * 0.9;
-//                     current-weekday: root.current-weekday;
-//                 }
-//             }
-//             Separate {
-//                 width: 100%;
-//             }
-//         }
-//         TodoList {
-//         }
-//     }
-    
-//     Tarbbar {
-//         y: (parent.height - self.height);
-//         height: 40px;
-//         width: parent.width;
-//     }
-// }
-
-// component MyButton inherits Button {
-//     callback clieckShow();
-//     clicked => {
-//         self.clieckShow();
-//     }
-//     /*
-//         private：默认修饰符，表示只有当前组件可以访问该函数。
-//         public：表示该函数可以在组件外部被调用。
-//         protected：表示该函数可以在组件内部和子类中被调用。
-//     */
-//     public function show() {
-//         self.text = "Showed";
-//     }
-// }
+component MyButton inherits Button {
+    callback clieckShow();
+    clicked => {
+        self.clieckShow();
+    }
+    /*
+        private：默认修饰符，表示只有当前组件可以访问该函数。
+        public：表示该函数可以在组件外部被调用。
+        protected：表示该函数可以在组件内部和子类中被调用。
+    */
+    public function show() {
+        self.text = "Showed";
+    }
+}
 
 
 // 要使 Slint 文件有效，其根元素必须是一个组件。然后，您可以在组件内部声明任意数量的元素。
