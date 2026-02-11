@@ -14,7 +14,7 @@ mod ctor_test {
         println!("launch function running...");
     }
 
-    #[dtor]
+    #[dtor] // dtor 函数在 panic 的时候不可靠
     fn destory() {
         println!("destory function running...");
     }
