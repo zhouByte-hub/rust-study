@@ -7,3 +7,4 @@ pub mod num_cpus_demo;
 pub mod os_info_demo;
 pub mod rdev_demo;
 pub mod shutdown;
+pub mod ssh_demo;

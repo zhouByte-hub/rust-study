@@ -57,6 +57,12 @@ ctrlc = "3.4.7"
 rdev = "0.5.3"
 lru = "0.16.1"
 
+
+# ssl
+# ssh2 = { version = "0.9.5", features = ["vendored-openssl"]}
+# openssl = { version = "0.10.75", features = ["vendored"] }
+
+
 # web
 qrcode-generator = "5.0.0"
 crossbeam-queue = "0.3.12"
