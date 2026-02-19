@@ -1,48 +1,23 @@
-use std::ops::Add;
+use gpui::{Application, AppContext};
+use gpui_component::{Root, theme::Theme};
+
+mod data;
+mod theme;
+mod components;
+mod dashboard;
+
+use dashboard::TradingPlatform;
 
 fn main() {
-    let a = A;
-    def(&a);
-
-    let b = B;
-    def(&b);
-}
-
-fn add<T>(x: T, y: T) -> T
-where
-    T: Add<Output = T>,
-{
-    x + y
-}
-
-trait Article {
-    fn publish(&self);
-}
-
-struct A;
-
-impl Article for A {
-    fn publish(&self) {
-        println!("publish A");
-    }
-}
-
-struct B;
-
-impl Article for B {
-    fn publish(&self) {
-        println!("publish B");
-    }
-}
-
-fn abc(t: &str) -> Box<dyn Article> {
-    match t {
-        "a" => Box::new(A),
-        "b" => Box::new(B),
-        _ => panic!("invalid article type"),
-    }
-}
-
-fn def(temp: &dyn Article) {
-    temp.publish();
+    Application::new().run(|cx| {
+        cx.set_global(Theme::default());
+        
+        cx.open_window(gpui::WindowOptions::default(), |window, cx| {
+            cx.new(|cx| {
+                let platform = cx.new(|_cx| TradingPlatform::new());
+                Root::new(platform, window, cx)
+            })
+        })
+        .unwrap();
+    });
 }
