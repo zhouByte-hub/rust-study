@@ -148,3 +148,8 @@ path = "rust_mcp/clients/examples/client_sampling_stdio.rs"
 [[example]]
 name = "count_client_stdio"
 path = "rust_mcp/clients/examples/count_client_stdio.rs"
+
+
+#[[example]]
+#name = "simple_main"
+#path = "gpui_ui/examples/simple_main.rs"

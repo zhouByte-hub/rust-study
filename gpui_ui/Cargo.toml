@@ -6,5 +6,5 @@ edition = "2024"
 [dependencies]
 gpui = "0.2.2"
 gpui-component = "0.5.1"
-# Optional, for default bundled assets
 gpui-component-assets = "0.5.1"
+tokio = { version = "1", features = ["time"] }
