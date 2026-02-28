@@ -16,3 +16,4 @@ pub mod string_format;
 pub mod wild;
 pub mod winnow_demo;
 pub mod winnow_rust_demo;
+pub mod async_trait_demo;
